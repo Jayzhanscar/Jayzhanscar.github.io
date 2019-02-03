@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>关于celery介绍 | 詹灵杰博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="django-celery">
+  
+  
+  
+  
+  <meta name="description" content="1.Celery是什么 1.1 Celery 是一个由 Python 编写的简单、灵活、可靠的用来处理大量信息的分布式系统,它同时提供操作和维护分布式系统所需的工具(它本身不是一个任务队列， 它是 任务队列管理的工具， 它提供的接口可以帮助我们实现分布式任务队列)。  1.2 Celery 专注于实时任务处理，支持任务调度(跟rabbitMQ可实现多种exchange。)   说白了，它是一个分布">
+<meta name="keywords" content="django-celery">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于celery介绍">
+<meta property="og:url" content="http://yoursite.com/2019/02/04/关于celery介绍/index.html">
+<meta property="og:site_name" content="詹灵杰博客">
+<meta property="og:description" content="1.Celery是什么 1.1 Celery 是一个由 Python 编写的简单、灵活、可靠的用来处理大量信息的分布式系统,它同时提供操作和维护分布式系统所需的工具(它本身不是一个任务队列， 它是 任务队列管理的工具， 它提供的接口可以帮助我们实现分布式任务队列)。  1.2 Celery 专注于实时任务处理，支持任务调度(跟rabbitMQ可实现多种exchange。)   说白了，它是一个分布">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/12/27/167ee4801725c4a0?w=568&h=586&f=png&s=69150">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/12/27/167ee48017afe522?w=782&h=171&f=png&s=15498">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/12/27/167ee480175db5eb?w=1018&h=348&f=png&s=71858">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/12/28/167f3ce29e79c561?w=453&h=270&f=png&s=16643">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/12/28/167f3ce29e79c561?w=453&h=270&f=png&s=16643">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/12/28/167f3ce29e8850af?w=549&h=295&f=png&s=51260">
+<meta property="og:updated_time" content="2019-02-03T19:06:44.128Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于celery介绍">
+<meta name="twitter:description" content="1.Celery是什么 1.1 Celery 是一个由 Python 编写的简单、灵活、可靠的用来处理大量信息的分布式系统,它同时提供操作和维护分布式系统所需的工具(它本身不是一个任务队列， 它是 任务队列管理的工具， 它提供的接口可以帮助我们实现分布式任务队列)。  1.2 Celery 专注于实时任务处理，支持任务调度(跟rabbitMQ可实现多种exchange。)   说白了，它是一个分布">
+<meta name="twitter:image" content="https://user-gold-cdn.xitu.io/2018/12/27/167ee4801725c4a0?w=568&h=586&f=png&s=69150">
+  
+    <link rel="alternate" href="/atom.xml" title="詹灵杰博客" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css">
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+
+
+<header id="allheader" class="site-header" role="banner">
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home">
+                <img style="margin-bottom: 10px;" width="224px" height="124px" alt="Hike News" src="https://www.ymkgdesign.com/media/blog_logo.png">
+              </a>
+            
+          </h1>
+          
+          
+            <div class="site-description">当你真心渴望追求某种事物的话，整个宇宙都会联合起来帮你完成。  ——《牧羊少年奇幻之旅》</div>
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows" style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-关于celery介绍" style="width: 66%; float:left;" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      关于celery介绍
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2019/02/04/关于celery介绍/" class="article-date">
+	  <time datetime="2019-02-03T19:04:43.000Z" itemprop="datePublished">February 4, 2019</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/python/">python</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-Celery是什么"><a href="#1-Celery是什么" class="headerlink" title="1.Celery是什么"></a>1.Celery是什么</h3><ul>
+<li><p>1.1 Celery 是一个由 Python 编写的简单、灵活、可靠的用来处理大量信息的分布式系统,它同时提供操作和维护分布式系统所需的工具(它本身不是一个任务队列， 它是<font color="#ea6f5a"> 任务队列管理的工具</font>， 它提供的接口可以帮助我们实现分布式任务队列)。</p>
+</li>
+<li><p>1.2 Celery <font color="#ea6f5a">专注于实时任务处理，支持任务调度</font>(跟rabbitMQ可实现多种exchange。)</p>
+</li>
+</ul>
+<p>说白了，它是一个分布式队列的管理工具，我们可以用 Celery 提供的接口快速实现并管理一个分布式的任务队列。</p>
+<a id="more"></a>
+<ul>
+<li><p>1.3 <strong>Celery 架构</strong><br> <img src="https://user-gold-cdn.xitu.io/2018/12/27/167ee4801725c4a0?w=568&amp;h=586&amp;f=png&amp;s=69150" alt="注释"></p>
+<ul>
+<li><strong>消息中间件(message broker)（邮箱， 邮局）</strong>: 本身不提供消息服务，可以和第三方消息中间件集成，常用的有 redis mongodb rabbitMQ</li>
+<li><p><strong>任务执行单元(worker)（寄件人）</strong>: 是Celery提供的<font color="#ea6f5a">任务执行单元</font>， worker并发的运行在分布式的系统节点中</p>
+</li>
+<li><p><strong>任务执行结果存储(task result store)（收件人）</strong>：用来存储Worker执行的任务的结果，Celery支持以不同方式存储任务的结果，包括Redis，MongoDB，Django ORM，AMQP等</p>
+</li>
+</ul>
+</li>
+<li><p>1.4 任务队列和消息队列</p>
+<ul>
+<li>任务队列是一种在线或机器分发任务的机制</li>
+<li><p>消息队列输入是工作的一个单元， 可以认为是一个任务，独立的职程（Worker）进程持续监视队列中是否有需要处理的新任务。</p>
+</li>
+<li><p>图解<br><img src="https://user-gold-cdn.xitu.io/2018/12/27/167ee48017afe522?w=782&amp;h=171&amp;f=png&amp;s=15498" alt="注释"></p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="2-简单示例"><a href="#2-简单示例" class="headerlink" title="2.简单示例"></a>2.简单示例</h3><h4 id="2-1-创建一个celery实例-创建tasks-py文件"><a href="#2-1-创建一个celery实例-创建tasks-py文件" class="headerlink" title="2.1 创建一个celery实例 创建tasks.py文件"></a>2.1 创建一个celery实例 创建tasks.py文件</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> celery <span class="keyword">import</span> Celery</span><br><span class="line"></span><br><span class="line">app = Celery(<span class="string">'tasks'</span>, broker=<span class="string">'redis:////127.0.0.1:6379/6'</span>, backend=<span class="string">'redis:////127.0.0.1:6379/7'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.task</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(x, y)</span>:</span></span><br><span class="line">    time.sleep(<span class="number">10</span>)</span><br><span class="line">    <span class="keyword">return</span> x + y</span><br></pre></td></tr></table></figure>
+<p><strong>ps: tasks为任务名称 设置reids为中间件</strong></p>
+<h4 id="2-2-创建一个index-py文件调用并且检测任务、查看任务执行状态"><a href="#2-2-创建一个index-py文件调用并且检测任务、查看任务执行状态" class="headerlink" title="2.2 创建一个index.py文件调用并且检测任务、查看任务执行状态"></a>2.2 创建一个index.py文件调用并且检测任务、查看任务执行状态</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"><span class="keyword">from</span> tasks <span class="keyword">import</span> add, app</span><br><span class="line"><span class="keyword">from</span> celery.result <span class="keyword">import</span> AsyncResult</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="comment"># 立即告知celery去执行add任务，并传入两个参数</span></span><br><span class="line">result = add.delay(<span class="number">4</span>, <span class="number">4</span>)</span><br><span class="line">print(result.id)</span><br><span class="line"><span class="keyword">async</span> = AsyncResult(id=result.id, app=app)</span><br><span class="line"></span><br><span class="line">time.sleep(<span class="number">3</span>)</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">async</span>.successful():</span><br><span class="line">    result = <span class="keyword">async</span>.get()</span><br><span class="line">    print(result, <span class="string">"执行成功"</span>)</span><br><span class="line">    <span class="comment"># result.forget() # 将结果删除</span></span><br><span class="line"><span class="keyword">elif</span> <span class="keyword">async</span>.failed():</span><br><span class="line">    print(<span class="string">'执行失败'</span>)</span><br><span class="line"><span class="keyword">elif</span> <span class="keyword">async</span>.status == <span class="string">'PENDING'</span>:</span><br><span class="line">    print(<span class="string">'任务等待中被执行'</span>)</span><br><span class="line"><span class="keyword">elif</span> <span class="keyword">async</span>.status == <span class="string">'RETRY'</span>:</span><br><span class="line">    print(<span class="string">'任务异常后正在重试'</span>)</span><br><span class="line"><span class="keyword">elif</span> <span class="keyword">async</span>.status == <span class="string">'STARTED'</span>:</span><br><span class="line">    print(<span class="string">'任务已经开始被执行'</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>ps 如果使用redis作为任务队列中间人，在redis中存在两个键 celery 和 _kombu.binding.celery ， _kombu.binding.celery 表示有一名为 celery 的任务队列（Celery 默认），而 celery为默认队列中的任务列表，使用list类型，可以看看添加进去的任务数据。</strong></li>
+</ul>
+<h4 id="2-3-执行命令详解"><a href="#2-3-执行命令详解" class="headerlink" title="2.3 执行命令详解"></a>2.3 执行命令详解</h4><ul>
+<li><p>celery -A app.celery_tasks.celery worker -Q queue –loglevel=info</p>
+<ul>
+<li><p>A参数指定celery对象的位置，该app.celery_tasks.celery指的    是app包下面的celery_tasks.py模块的celery实例，注意一定是初始化后的实例，</p>
+</li>
+<li><p>Q参数指的是该worker接收指定的队列的任务，这是为了当多个队列有不同的任务时可以独立；如果不设会接收所有的队列的任务；</p>
+</li>
+<li><p>l参数指定worker的日志级别；</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><em>执行完毕后结果存储在redis中，查看redis中的数据，发现存在一个string类型的键值对<br>celery-task-meta-064e4262-e1ba-4e87-b4a1-52dd1418188f:data<br>该键值对的失效时间为24小时</em></p>
+<h4 id="2-4-消息主体分析"><a href="#2-4-消息主体分析" class="headerlink" title="2.4 消息主体分析"></a>2.4 消息主体分析</h4><ul>
+<li><strong>body</strong> : 是序列化后使用base64编码的信息，包括具体的任务参数，其中包括了需要执行的方法、参数和一些任务基本信息</li>
+<li><strong>content-encoding</strong>: 序列化数据编码方式</li>
+<li><strong>content-type</strong>:  任务数据的序列化方式，默认使用python内置的序列化模块pickle(ps: pickle模块支持的类型 所有python支持的原生类型：布尔值，整数，浮点数，复数，字符串，字节，None。<br>由任何原生类型组成的列表，元组，字典和集合。<br>函数，类，类的实例， 常用的方法：dumps,dump,loads,load)</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;body&quot;: &quot;gAJ9cQAoWAQAAAB0YXNrcQFYCQAAAHRhc2tzLmFkZHECWAIAAABpZHEDWCQAAABjNDMwMzZkMi03Yzc3LTQ0MDUtOTYwNC1iZDc3ZTcyNzNlN2FxBFgEAAAAYXJnc3EFSwRLBIZxBlgGAAAAa3dhcmdzcQd9cQhYBwAAAHJldHJpZXNxCUsAWAMAAABldGFxCk5YBwAAAGV4cGlyZXNxC05YAwAAAHV0Y3EMiFgJAAAAY2FsbGJhY2tzcQ1OWAgAAABlcnJiYWNrc3EOTlgJAAAAdGltZWxpbWl0cQ9OToZxEFgHAAAAdGFza3NldHERTlgFAAAAY2hvcmRxEk51Lg==&quot;,</span><br><span class="line">    &quot;content-encoding&quot;: &quot;binary&quot;,</span><br><span class="line">    &quot;content-type&quot;: &quot;application/x-python-serialize&quot;,</span><br><span class="line">    &quot;headers&quot;: &#123;&#125;,</span><br><span class="line">    &quot;properties&quot;: &#123;</span><br><span class="line">        &quot;reply_to&quot;: &quot;caa78c3a-618a-31f0-84a9-b79db708af02&quot;,</span><br><span class="line">        &quot;correlation_id&quot;: &quot;c43036d2-7c77-4405-9604-bd77e7273e7a&quot;,</span><br><span class="line">        &quot;delivery_mode&quot;: 2,</span><br><span class="line">        &quot;delivery_info&quot;: &#123;</span><br><span class="line">            &quot;priority&quot;: 0,</span><br><span class="line">            &quot;exchange&quot;: &quot;celery&quot;,</span><br><span class="line">            &quot;routing_key&quot;: &quot;celery&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;body_encoding&quot;: &quot;base64&quot;,</span><br><span class="line">        &quot;delivery_tag&quot;: &quot;e7e288b5-ecbb-4ec6-912c-f42eb92dbd72&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="2-5-Celery配置"><a href="#2-5-Celery配置" class="headerlink" title="2.5 Celery配置"></a>2.5 <strong>Celery配置</strong></h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CELERY_DEFAULT_QUEUE：默认队列</span><br><span class="line">BROKER_URL  : 代理人的网址</span><br><span class="line">CELERY_RESULT_BACKEND：结果存储地址</span><br><span class="line">CELERY_TASK_SERIALIZER：任务序列化方式</span><br><span class="line">CELERY_RESULT_SERIALIZER：任务执行结果序列化方式</span><br><span class="line">CELERY_TASK_RESULT_EXPIRES：任务过期时间</span><br><span class="line">CELERY_ACCEPT_CONTENT：指定任务接受的内容序列化类型(序列化)，一个列表；</span><br></pre></td></tr></table></figure>
+<h4 id="2-6-获取执行任务执行结果的方法"><a href="#2-6-获取执行任务执行结果的方法" class="headerlink" title="2.6 获取执行任务执行结果的方法"></a>2.6 <strong>获取执行任务执行结果的方法</strong></h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">r = func.delay(...)</span><br><span class="line">r.ready()     			<span class="comment"># 查看任务状态，返回布尔值,  任务执行完成, 返回 True, 否则返回 False.</span></span><br><span class="line">r.wait()      			<span class="comment"># 等待任务完成, 返回任务执行结果，很少使用；</span></span><br><span class="line">r.get(timeout=<span class="number">1</span>)       <span class="comment"># 获取任务执行结果，可以设置等待时间</span></span><br><span class="line">r.result      			<span class="comment"># 任务执行结果.</span></span><br><span class="line">r.state       			<span class="comment"># PENDING, START, SUCCESS，任务当前的状态</span></span><br><span class="line">r.status     				<span class="comment"># PENDING, START, SUCCESS，任务当前的状态</span></span><br><span class="line">r.successful  			<span class="comment"># 任务成功返回true</span></span><br><span class="line">r.traceback 				<span class="comment"># 如果任务抛出了一个异常，你也可以获取原始的回溯信息</span></span><br></pre></td></tr></table></figure>
+<h4 id="2-7-celery的装饰方法celery-task"><a href="#2-7-celery的装饰方法celery-task" class="headerlink" title="2.7 celery的装饰方法celery.task"></a>2.7 <strong>celery的装饰方法celery.task</strong></h4><ul>
+<li>task()把任务（函数）装饰成异步</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@celery.task()</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">()</span>:</span></span><br><span class="line">	<span class="comment"># do something</span></span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>可以重新定义任务的基类</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyTask</span><span class="params">(celery.Task)</span>:</span></span><br><span class="line">    <span class="comment"># 任务失败时执行</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">on_failure</span><span class="params">(self, exc, task_id, args, kwargs, einfo)</span>:</span></span><br><span class="line">        print(<span class="string">'&#123;0!r&#125; failed: &#123;1!r&#125;'</span>.format(task_id, exc))</span><br><span class="line">    <span class="comment"># 任务成功时执行</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">on_success</span><span class="params">(self, retval, task_id, args, kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="comment"># 任务重试时执行</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">on_retry</span><span class="params">(self, exc, task_id, args, kwargs, einfo)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+<p><strong>参数</strong></p>
+<ul>
+<li>task_id : 任务id</li>
+<li>einfo：执行失败时任务详情</li>
+<li>exc： 失败时的错误类型</li>
+<li>retval： 任务成功时返回的执行结果</li>
+</ul>
+<h4 id="2-8-一份完整的配置文件"><a href="#2-8-一份完整的配置文件" class="headerlink" title="2.8 一份完整的配置文件"></a>2.8 一份完整的配置文件</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 注意，celery4版本后，CELERY_BROKER_URL改为BROKER_URL</span></span><br><span class="line">BROKER_URL = <span class="string">'amqp://username:passwd@host:port/虚拟主机名'</span></span><br><span class="line"><span class="comment"># 指定结果的接受地址</span></span><br><span class="line">CELERY_RESULT_BACKEND = <span class="string">'redis://username:passwd@host:port/db'</span></span><br><span class="line"><span class="comment"># 指定任务序列化方式</span></span><br><span class="line">CELERY_TASK_SERIALIZER = <span class="string">'msgpack'</span> </span><br><span class="line"><span class="comment"># 指定结果序列化方式</span></span><br><span class="line">CELERY_RESULT_SERIALIZER = <span class="string">'msgpack'</span></span><br><span class="line"><span class="comment"># 任务过期时间,celery任务执行结果的超时时间</span></span><br><span class="line">CELERY_TASK_RESULT_EXPIRES = <span class="number">60</span> * <span class="number">20</span>   </span><br><span class="line"><span class="comment"># 指定任务接受的序列化类型.</span></span><br><span class="line">CELERY_ACCEPT_CONTENT = [<span class="string">"msgpack"</span>]   </span><br><span class="line"><span class="comment"># 任务发送完成是否需要确认，这一项对性能有一点影响     </span></span><br><span class="line">CELERY_ACKS_LATE = <span class="keyword">True</span>  </span><br><span class="line"><span class="comment"># 压缩方案选择，可以是zlib, bzip2，默认是发送没有压缩的数据</span></span><br><span class="line">CELERY_MESSAGE_COMPRESSION = <span class="string">'zlib'</span> </span><br><span class="line"><span class="comment"># 规定完成任务的时间</span></span><br><span class="line">CELERYD_TASK_TIME_LIMIT = <span class="number">5</span>  <span class="comment"># 在5s内完成任务，否则执行该任务的worker将被杀死，任务移交给父进程</span></span><br><span class="line"><span class="comment"># celery worker的并发数，默认是服务器的内核数目,也是命令行-c参数指定的数目</span></span><br><span class="line">CELERYD_CONCURRENCY = <span class="number">4</span> </span><br><span class="line"><span class="comment"># celery worker 每次去rabbitmq预取任务的数量</span></span><br><span class="line">CELERYD_PREFETCH_MULTIPLIER = <span class="number">4</span> </span><br><span class="line"><span class="comment"># 每个worker执行了多少任务就会死掉，默认是无限的</span></span><br><span class="line">CELERYD_MAX_TASKS_PER_CHILD = <span class="number">40</span> </span><br><span class="line"><span class="comment"># 设置默认的队列名称，如果一个消息不符合其他的队列就会放在默认队列里面，如果什么都不设置的话，数据都会发送到默认的队列中</span></span><br><span class="line">CELERY_DEFAULT_QUEUE = <span class="string">"default"</span> </span><br><span class="line"><span class="comment"># 设置详细的队列</span></span><br><span class="line">CELERY_QUEUES = &#123;</span><br><span class="line">    <span class="string">"default"</span>: &#123; <span class="comment"># 这是上面指定的默认队列</span></span><br><span class="line">        <span class="string">"exchange"</span>: <span class="string">"default"</span>,</span><br><span class="line">        <span class="string">"exchange_type"</span>: <span class="string">"direct"</span>,</span><br><span class="line">        <span class="string">"routing_key"</span>: <span class="string">"default"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">"topicqueue"</span>: &#123; <span class="comment"># 这是一个topic队列 凡是topictest开头的routing key都会被放到这个队列</span></span><br><span class="line">        <span class="string">"routing_key"</span>: <span class="string">"topic.#"</span>,</span><br><span class="line">        <span class="string">"exchange"</span>: <span class="string">"topic_exchange"</span>,</span><br><span class="line">        <span class="string">"exchange_type"</span>: <span class="string">"topic"</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">"task_eeg"</span>: &#123; <span class="comment"># 设置扇形交换机</span></span><br><span class="line">        <span class="string">"exchange"</span>: <span class="string">"tasks"</span>,</span><br><span class="line">        <span class="string">"exchange_type"</span>: <span class="string">"fanout"</span>,</span><br><span class="line">        <span class="string">"binding_key"</span>: <span class="string">"tasks"</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="2-8-Celery定时任务"><a href="#2-8-Celery定时任务" class="headerlink" title="2.8 Celery定时任务"></a>2.8 Celery定时任务</h4><ul>
+<li>指定定时任务并加入配置 重新启动worker</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># config.py</span></span><br><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> timedelta</span><br><span class="line"><span class="keyword">from</span> celery.schedules <span class="keyword">import</span> crontab</span><br><span class="line"> </span><br><span class="line">CELERYBEAT_SCHEDULE = &#123;</span><br><span class="line">    <span class="string">'ptask'</span>: &#123;</span><br><span class="line">        <span class="string">'task'</span>: <span class="string">'tasks.period_task'</span>,</span><br><span class="line">        <span class="string">'schedule'</span>: timedelta(seconds=<span class="number">5</span>),</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加定时任务</span></span><br><span class="line"><span class="meta">@app.task(bind=True)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">period_task</span><span class="params">(self)</span>:</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">'period task done: &#123;0&#125;'</span>.format(self.request.id)</span><br></pre></td></tr></table></figure>
+<p><strong>PS:时间如果涉及到datatime最好设置为UTC时间</strong></p>
+<ul>
+<li>启动定时任务进程</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">celery -A task beat</span><br></pre></td></tr></table></figure>
+<h4 id="2-9-链式任务"><a href="#2-9-链式任务" class="headerlink" title="2.9 链式任务"></a>2.9 链式任务</h4><p>链式任务就是异步或者定时执行的任务由多个子任务执行完成</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">update_page_info</span><span class="params">(url)</span>:</span></span><br><span class="line">    <span class="comment"># fetch_page -&gt; parse_page -&gt; store_page</span></span><br><span class="line">    chain = fetch_page.s(url) | parse_page.s() | store_page_info.s(url)</span><br><span class="line">    chain()</span><br><span class="line"> </span><br><span class="line"><span class="meta">@app.task()</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fetch_page</span><span class="params">(url)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> myhttplib.get(url)</span><br><span class="line"> </span><br><span class="line"><span class="meta">@app.task()</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse_page</span><span class="params">(page)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> myparser.parse_document(page)</span><br><span class="line"> </span><br><span class="line"><span class="meta">@app.task(ignore_result=True)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">store_page_info</span><span class="params">(info, url)</span>:</span></span><br><span class="line">    PageInfo.objects.create(url=url, info=info)</span><br><span class="line"></span><br><span class="line"> fetch_page.apply_async((url), link=[parse_page.s(), store_page_info.s(url)])</span><br></pre></td></tr></table></figure>
+<h3 id="3-Celery-rabbitmq实现exchange三种模式"><a href="#3-Celery-rabbitmq实现exchange三种模式" class="headerlink" title="3 Celery, rabbitmq实现exchange三种模式"></a>3 Celery, rabbitmq实现exchange三种模式</h3><ul>
+<li>celery的工作流程</li>
+</ul>
+<p><img src="https://user-gold-cdn.xitu.io/2018/12/27/167ee480175db5eb?w=1018&amp;h=348&amp;f=png&amp;s=71858" alt="celery流程"></p>
+<ul>
+<li><strong>borker</strong> : 消息中间件</li>
+<li><strong>worker</strong> : 任务执行单元</li>
+<li><strong>storgae</strong>: 任务执行结果存储</li>
+</ul>
+<h4 id="3-1-exchange-常用模式介绍-direct-fanout-topic-header"><a href="#3-1-exchange-常用模式介绍-direct-fanout-topic-header" class="headerlink" title="3.1 exchange 常用模式介绍(direct, fanout, topic, header)"></a>3.1 exchange 常用模式介绍(direct, fanout, topic, header)</h4><blockquote>
+<p>当我们执行的任务需要根据特定的需要进行分类时，我们可以对任务创建多个队列进行， 每一个队列交换方式可以指定，需要注意的是：redis只能提供 direct exchange 方式， 也是默认指定的方式，所以我们把中间人换成了rabbitmq。</p>
+<p>首先我们来了解一下交换模式有哪些？</p>
+</blockquote>
+<ul>
+<li><p><strong>Direct Exchange 模式</strong></p>
+<p>  <img src="https://user-gold-cdn.xitu.io/2018/12/28/167f3ce29e79c561?w=453&amp;h=270&amp;f=png&amp;s=16643" alt="direct"></p>
+<ul>
+<li><p>这种模式是rabbitmq（redis）自带的一种模式，所以我们在实际使用过程中只要指定routing_key就可以了，<br>或者是指定队列名称即可。</p>
+<p><strong>ps: 如果我们指定的队列名称不在配置里面，那我们创建的这条消息任务会被自动废除，所以需要检查下配置里的队列是否正确，因为rabbitmq只具备存储队列的能力，不能存储消息信息。</strong></p>
+</li>
+</ul>
+</li>
+<li><p><strong>Fanout Exchange 模式</strong></p>
+<p>  <img src="https://user-gold-cdn.xitu.io/2018/12/28/167f3ce29e79c561?w=453&amp;h=270&amp;f=png&amp;s=16643" alt="fanout"></p>
+<ul>
+<li>fanout模式不用指定routing_key， 所有exchange_ type 是fanout的 Queue都会执行<ul>
+<li>所以队列和fanout可以多对多绑定。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>Topic Exchange 模式</strong></p>
+<p>  <img src="https://user-gold-cdn.xitu.io/2018/12/28/167f3ce29e8850af?w=549&amp;h=295&amp;f=png&amp;s=51260" alt="topic"></p>
+<p>  <em>任何发送到Topic Exchange的消息都会被转发到所有关心RouteKey中指定话题的Queue上</em></p>
+<ul>
+<li><p>这种模式较为复杂，简单来说，就是每个队列都有其关心的主题，所有的消息都带有一个“标题”(RouteKey)，Exchange会将消息转发到所有关注主题能与RouteKey模糊匹配的队列。</p>
+</li>
+<li><p>这种模式需要RouteKey，也许要提前绑定Exchange与Queue。</p>
+</li>
+<li><p>在进行绑定时，要提供一个该队列关心的主题，如“#.log.#”表示该队列关心所有涉及log的消息(一个RouteKey为”MQ.log.error”的消息会被转发到该队列)。</p>
+</li>
+<li><p>“#”表示0个或若干个关键字，“”表示一个关键字。如“log.”能与“log.warn”匹配，无法与“log.warn.timeout”匹配；但是“log.#”能与上述两者匹配。</p>
+</li>
+<li><p>同样，如果Exchange没有发现能够与RouteKey匹配的Queue，则会抛弃此消息。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-2-在实际例子中如何去运用这三种模式"><a href="#3-2-在实际例子中如何去运用这三种模式" class="headerlink" title="3.2 在实际例子中如何去运用这三种模式"></a>3.2 在实际例子中如何去运用这三种模式</h4><ul>
+<li><p>首先要安装rabitmq并且启动 rabbitmq-server</p>
+</li>
+<li><p>创建rabbitmq_config.py 文件， 并且把之前在tasks.py中引用的配置修改为rabbitmq_config，代码如下</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#coding:utf-8</span><br><span class="line">from celery.schedules import crontab</span><br><span class="line">import sys</span><br><span class="line">import os</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">sys.path.insert(0, os.getcwd())</span><br><span class="line">CELERY_IMPORTS = (&quot;tasks&quot;, )</span><br><span class="line">CELERY_RESULT_BACKEND = &quot;amqp&quot;</span><br><span class="line">BROKER_HOST = &quot;localhost&quot;</span><br><span class="line">BROKER_PORT = 5672</span><br><span class="line">BROKER_USER = &quot;guest&quot;</span><br><span class="line">BROKER_PASSWORD = &quot;guest&quot;</span><br><span class="line">BROKER_VHOST = &quot;/&quot;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>创建需要的交换方式</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">default_exchange = Exchange(<span class="string">'dedfault'</span>, type=<span class="string">'direct'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义一个媒体交换机,类型是直连交换机</span></span><br><span class="line">media_exchange = Exchange(<span class="string">'media'</span>, type=<span class="string">'direct'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义一个image交换机,类型是fanout交换机</span></span><br><span class="line">image_exchange = Exchange(<span class="string">'media'</span>, type=<span class="string">'direct'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建三个队列，一个是默认队列，一个是video、一个image</span></span><br><span class="line">CELERY_QUEUES = (</span><br><span class="line">    Queue(<span class="string">'default'</span>, default_exchange, routing_key=<span class="string">'default'</span>),</span><br><span class="line">    Queue(<span class="string">'videos'</span>, media_exchange, routing_key=<span class="string">'media.video'</span>),</span><br><span class="line">    Queue(<span class="string">'images'</span>, media_exchange, routing_key=<span class="string">'media.image'</span>)</span><br><span class="line">)</span><br><span class="line"><span class="comment"># 定义默认队列和默认的交换机routing_key</span></span><br><span class="line">CELERY_DEFAULT_QUEUE = <span class="string">'default'</span></span><br><span class="line">CELERY_DEFAULT_EXCHANGE = <span class="string">'default'</span></span><br><span class="line">CELERY_DEFAULT_ROUTING_KEY = <span class="string">'default'</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>在tasks.py中指定任务</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># 视频压缩</span></span><br><span class="line"><span class="meta">@app.task</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">video_compress</span><span class="params">(video_name)</span>:</span></span><br><span class="line">    time.sleep(<span class="number">10</span>)</span><br><span class="line">    print(<span class="string">'Compressing the:'</span>, video_name)</span><br><span class="line">    <span class="keyword">return</span> <span class="string">'success'</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.task</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">video_upload</span><span class="params">(video_name)</span>:</span></span><br><span class="line">    time.sleep(<span class="number">5</span>)</span><br><span class="line">    print( <span class="string">u'正在上传视频'</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="string">'success'</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 压缩照片</span></span><br><span class="line"><span class="meta">@app.task</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">image_compress</span><span class="params">(image_name)</span>:</span></span><br><span class="line">    time.sleep(<span class="number">10</span>)</span><br><span class="line">    print(<span class="string">'Compressing the:'</span>, image_name)</span><br><span class="line">    <span class="keyword">return</span> <span class="string">'success'</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 其他任务</span></span><br><span class="line"><span class="meta">@app.task</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">other</span><span class="params">(str)</span>:</span></span><br><span class="line">    time.sleep(<span class="number">10</span>)</span><br><span class="line">    <span class="keyword">print</span> (<span class="string">'Do other things'</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="string">'success'</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>指定路由</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">CELERY_ROUTES = (&#123;<span class="string">'tasks.image_compress'</span>: &#123;</span><br><span class="line">                        <span class="string">'queue'</span>: <span class="string">'images'</span>,</span><br><span class="line">                        <span class="string">'routing_key'</span>: <span class="string">'media.image'</span></span><br><span class="line">                 &#125;&#125;,&#123;<span class="string">'tasks.video_upload'</span>: &#123;</span><br><span class="line">                        <span class="string">'queue'</span>: <span class="string">'videos'</span>,</span><br><span class="line">                        <span class="string">'routing_key'</span>: <span class="string">'media.video'</span></span><br><span class="line">                 &#125;&#125;,&#123;<span class="string">'tasks.video_compress'</span>: &#123;</span><br><span class="line">                        <span class="string">'queue'</span>: <span class="string">'videos'</span>,</span><br><span class="line">                        <span class="string">'routing_key'</span>: <span class="string">'media.video'</span></span><br><span class="line">                 &#125;&#125;, )</span><br></pre></td></tr></table></figure>
+<h4 id="现在执行创建的任务"><a href="#现在执行创建的任务" class="headerlink" title="现在执行创建的任务"></a><strong>现在执行创建的任务</strong></h4><p>在启动worker的时候可以分两种启动方式</p>
+<p>第一种： 指定Queue</p>
+<p>第二种 ： 不指定（全部执行）</p>
+<p><strong>ps 为了更好的看到我们添加的队列，还有相应的交换模式，启动全部的队列</strong></p>
+<p>启动worker</p>
+<p>[queue]中包含了创建的队列，其他参数本文前面可以对照<br>[tasks]中显示了我们所有的任务</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">---- **** ----- </span><br><span class="line">--- * ***  * -- Darwin-18.2.0-x86_64-i386-64bit 2018-12-28 15:38:00</span><br><span class="line">-- * - **** --- </span><br><span class="line">- ** ---------- [config]</span><br><span class="line">- ** ---------- .&gt; app:         tasks:0x104e78d68</span><br><span class="line">- ** ---------- .&gt; transport:   amqp://guest:**@localhost:5672//</span><br><span class="line">- ** ---------- .&gt; results:     amqp://</span><br><span class="line">- *** --- * --- .&gt; concurrency: 4 (prefork)</span><br><span class="line">-- ******* ---- .&gt; task events: OFF (enable -E to monitor tasks in this worker)</span><br><span class="line">--- ***** ----- </span><br><span class="line"> -------------- [queues]</span><br><span class="line">                .&gt; default          exchange=dedfault(direct) key=default</span><br><span class="line">                .&gt; images           exchange=media(direct) key=media.image</span><br><span class="line">                .&gt; others           exchange=other(fanout) key=other.others</span><br><span class="line">                .&gt; videos           exchange=media(direct) key=media.video</span><br><span class="line"></span><br><span class="line">[tasks]</span><br><span class="line">  . tasks.add</span><br><span class="line">  . tasks.dr</span><br><span class="line">  . tasks.image_compress</span><br><span class="line">  . tasks.other</span><br><span class="line">  . tasks.period_task</span><br><span class="line">  . tasks.task</span><br><span class="line">  . tasks.video_compress</span><br><span class="line">  . tasks.video_upload</span><br><span class="line"></span><br><span class="line">[2018-12-28 15:38:00,906: INFO/MainProcess] Connected to amqp://guest:**@127.0.0.1:5672//</span><br></pre></td></tr></table></figure>
+<p>执行结果(可以在rabbimq后台管理中看相关执行结果)：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">2018</span><span class="number">-12</span><span class="number">-28</span> <span class="number">15</span>:<span class="number">38</span>:<span class="number">00</span>,<span class="number">906</span>: INFO/MainProcess] Connected to amqp://guest:**@<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">5672</span>//</span><br><span class="line">[<span class="number">2018</span><span class="number">-12</span><span class="number">-28</span> <span class="number">15</span>:<span class="number">38</span>:<span class="number">00</span>,<span class="number">933</span>: INFO/MainProcess] mingle: searching <span class="keyword">for</span> neighbors</span><br><span class="line">[<span class="number">2018</span><span class="number">-12</span><span class="number">-28</span> <span class="number">15</span>:<span class="number">38</span>:<span class="number">02</span>,<span class="number">013</span>: INFO/MainProcess] mingle: all alone</span><br><span class="line">[<span class="number">2018</span><span class="number">-12</span><span class="number">-28</span> <span class="number">15</span>:<span class="number">38</span>:<span class="number">02</span>,<span class="number">091</span>: INFO/MainProcess] celery@zhanlingjiedeMacBook-Pro.local ready.</span><br><span class="line">[<span class="number">2018</span><span class="number">-12</span><span class="number">-28</span> <span class="number">15</span>:<span class="number">38</span>:<span class="number">42</span>,<span class="number">386</span>: INFO/MainProcess] Received task: tasks.add[<span class="number">1</span>fdfbc23-e106<span class="number">-49</span>ab-ac25-d46c2b5e8960]  </span><br><span class="line">[<span class="number">2018</span><span class="number">-12</span><span class="number">-28</span> <span class="number">15</span>:<span class="number">38</span>:<span class="number">42</span>,<span class="number">429</span>: INFO/ForkPoolWorker<span class="number">-3</span>] Task tasks.add[<span class="number">1</span>fdfbc23-e106<span class="number">-49</span>ab-ac25-d46c2b5e8960] succeeded <span class="keyword">in</span> <span class="number">0.040455893002217636</span>s: <span class="number">5</span></span><br><span class="line">[<span class="number">2018</span><span class="number">-12</span><span class="number">-28</span> <span class="number">15</span>:<span class="number">38</span>:<span class="number">46</span>,<span class="number">397</span>: INFO/MainProcess] Received task: tasks.image_compress[cab797c5-eaae<span class="number">-4</span>f11-b55c<span class="number">-041</span>f4256ead9]  </span><br><span class="line">[<span class="number">2018</span><span class="number">-12</span><span class="number">-28</span> <span class="number">15</span>:<span class="number">38</span>:<span class="number">46</span>,<span class="number">410</span>: INFO/MainProcess] Received task: tasks.other[<span class="number">0b00</span>fd52<span class="number">-2251</span><span class="number">-42</span>ef<span class="number">-9743</span><span class="number">-49</span>df3f2906ed]  </span><br><span class="line">[<span class="number">2018</span><span class="number">-12</span><span class="number">-28</span> <span class="number">15</span>:<span class="number">38</span>:<span class="number">56</span>,<span class="number">401</span>: WARNING/ForkPoolWorker<span class="number">-4</span>] Compressing the:</span><br><span class="line">[<span class="number">2018</span><span class="number">-12</span><span class="number">-28</span> <span class="number">15</span>:<span class="number">38</span>:<span class="number">56</span>,<span class="number">402</span>: WARNING/ForkPoolWorker<span class="number">-4</span>] 这是我上传的图片</span><br><span class="line">[<span class="number">2018</span><span class="number">-12</span><span class="number">-28</span> <span class="number">15</span>:<span class="number">38</span>:<span class="number">56</span>,<span class="number">412</span>: WARNING/ForkPoolWorker<span class="number">-3</span>] Do other things</span><br><span class="line">[<span class="number">2018</span><span class="number">-12</span><span class="number">-28</span> <span class="number">15</span>:<span class="number">38</span>:<span class="number">56</span>,<span class="number">447</span>: INFO/ForkPoolWorker<span class="number">-3</span>] Task tasks.other[<span class="number">0b00</span>fd52<span class="number">-2251</span><span class="number">-42</span>ef<span class="number">-9743</span><span class="number">-49</span>df3f2906ed] succeeded <span class="keyword">in</span> <span class="number">10.036200570997607</span>s: <span class="string">'success'</span></span><br><span class="line">[<span class="number">2018</span><span class="number">-12</span><span class="number">-28</span> <span class="number">15</span>:<span class="number">38</span>:<span class="number">56</span>,<span class="number">461</span>: INFO/ForkPoolWorker<span class="number">-4</span>] Task tasks.image_compress[cab797c5-eaae<span class="number">-4</span>f11-b55c<span class="number">-041</span>f4256ead9] succeeded <span class="keyword">in</span> <span class="number">10.061314186998061</span>s: <span class="string">'success'</span></span><br></pre></td></tr></table></figure>
+<h3 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h3><h4 id="一般在使用celery为了和实际场景结合会使用框架去使用-django-celery-redis-rabbitmq"><a href="#一般在使用celery为了和实际场景结合会使用框架去使用-django-celery-redis-rabbitmq" class="headerlink" title="一般在使用celery为了和实际场景结合会使用框架去使用 django + celery + redis(rabbitmq)"></a>一般在使用celery为了和实际场景结合会使用框架去使用 django + celery + redis(rabbitmq)</h4>
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/python/">python</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/django-celery/">django-celery</a></li></ul>
+
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8yOTQ4MS82MDQ5">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/02/04/Continue-writing/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Continue writing</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Celery是什么"><span class="nav-number">1.</span> <span class="nav-text">1.Celery是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-简单示例"><span class="nav-number">2.</span> <span class="nav-text">2.简单示例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-创建一个celery实例-创建tasks-py文件"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 创建一个celery实例 创建tasks.py文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-创建一个index-py文件调用并且检测任务、查看任务执行状态"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 创建一个index.py文件调用并且检测任务、查看任务执行状态</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-执行命令详解"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 执行命令详解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-消息主体分析"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 消息主体分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-5-Celery配置"><span class="nav-number">2.5.</span> <span class="nav-text">2.5 Celery配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-6-获取执行任务执行结果的方法"><span class="nav-number">2.6.</span> <span class="nav-text">2.6 获取执行任务执行结果的方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-7-celery的装饰方法celery-task"><span class="nav-number">2.7.</span> <span class="nav-text">2.7 celery的装饰方法celery.task</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-8-一份完整的配置文件"><span class="nav-number">2.8.</span> <span class="nav-text">2.8 一份完整的配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-8-Celery定时任务"><span class="nav-number">2.9.</span> <span class="nav-text">2.8 Celery定时任务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-9-链式任务"><span class="nav-number">2.10.</span> <span class="nav-text">2.9 链式任务</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Celery-rabbitmq实现exchange三种模式"><span class="nav-number">3.</span> <span class="nav-text">3 Celery, rabbitmq实现exchange三种模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-exchange-常用模式介绍-direct-fanout-topic-header"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 exchange 常用模式介绍(direct, fanout, topic, header)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-在实际例子中如何去运用这三种模式"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 在实际例子中如何去运用这三种模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#现在执行创建的任务"><span class="nav-number">3.3.</span> <span class="nav-text">现在执行创建的任务</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#补充"><span class="nav-number">4.</span> <span class="nav-text">补充</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#一般在使用celery为了和实际场景结合会使用框架去使用-django-celery-redis-rabbitmq"><span class="nav-number">4.1.</span> <span class="nav-text">一般在使用celery为了和实际场景结合会使用框架去使用 django + celery + redis(rabbitmq)</span></a></li></ol></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2019 詹灵杰博客 All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script>
+</body>
+</html>

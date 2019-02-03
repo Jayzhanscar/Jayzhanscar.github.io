@@ -3,21 +3,24 @@
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <title>Page 1 | Hexo</title>
+  <title>Page 1 | 詹灵杰博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
   
   
   
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
+  <meta name="description" content="当你真心渴望追求某种事物的话，整个宇宙都会联合起来帮你完成。  ——《牧羊少年奇幻之旅》">
+<meta property="og:type" content="website">
+<meta property="og:title" content="詹灵杰博客">
 <meta property="og:url" content="http://yoursite.com/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="詹灵杰博客">
+<meta property="og:description" content="当你真心渴望追求某种事物的话，整个宇宙都会联合起来帮你完成。  ——《牧羊少年奇幻之旅》">
 <meta property="og:locale" content="default">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="詹灵杰博客">
+<meta name="twitter:description" content="当你真心渴望追求某种事物的话，整个宇宙都会联合起来帮你完成。  ——《牧羊少年奇幻之旅》">
   
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="詹灵杰博客" type="application/atom+xml">
   
   <link rel="icon" href="/css/images/favicon.ico">
   
@@ -52,42 +55,22 @@
 
 
   
-  
-  <div class="site-header-image">
-    <img id="originBg" width="100%" alt="Hike News" src="">
-  </div>
-
-  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
-    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
-  </div>
-
-  <script>
-        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
-        var random = Math.floor((Math.random() * imgUrls.length ));
-        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
-          document.getElementById("originBg").src=imgUrls[random];
-          document.getElementById("blurBg").src=imgUrls[random];
-        } else {
-          document.getElementById("originBg").src='/' + imgUrls[random];
-          document.getElementById("blurBg").src='/' + imgUrls[random];
-        }
-    </script>
 
 
-
-
-<header id="allheader" class="site-header" role="banner" style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);">
+<header id="allheader" class="site-header" role="banner">
   <div class="clearfix container">
       <div class="site-branding">
 
           <h1 class="site-title">
             
               <a href="/" rel="home">
-                <img style="margin-bottom: 10px;" width="124px" height="124px" alt="Hike News" src="https://hexo.io/logo.svg">
+                <img style="margin-bottom: 10px;" width="224px" height="124px" alt="Hike News" src="https://www.ymkgdesign.com/media/blog_logo.png">
               </a>
             
           </h1>
           
+          
+            <div class="site-description">当你真心渴望追求某种事物的话，整个宇宙都会联合起来帮你完成。  ——《牧羊少年奇幻之旅》</div>
           
             
           <nav id="main-navigation" class="main-navigation" role="navigation">
@@ -123,7 +106,7 @@
         
           <section id="main">
   
-    <article id="post-test" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <article id="post-关于celery介绍" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
     
     
@@ -131,7 +114,7 @@
         
   
     <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2019/02/01/test/">test</a>
+      <a class="article-title" href="/2019/02/04/关于celery介绍/">关于celery介绍</a>
     </h1>
   
 
@@ -139,21 +122,46 @@
     
     <div class="article-meta">
       
-	<a href="/2019/02/01/test/" class="article-date">
-	  <time datetime="2019-02-01T09:01:53.000Z" itemprop="datePublished">February 1, 2019</time>
+	<a href="/2019/02/04/关于celery介绍/" class="article-date">
+	  <time datetime="2019-02-03T19:04:43.000Z" itemprop="datePublished">February 4, 2019</time>
 	</a>
 
-       
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/python/">python</a>
+ 
       
     </div>
     <div class="article-entry" itemprop="articleBody">
       
         
+
+          
+          <div class="entry-summary">
+          1.Celery是什么
+1.1 Celery 是一个由 Python 编写的简单、灵活、可靠的用来处理大量信息的分布式系统,它同时提供操作和维护分布式系统所需的工具(它本身不是一个任务队列， 它是 任务队列管理的工具， 它提供的接口可以帮助我们实现分布式任务队列)。
+
+1.2 Celery 专注于实时任务处理，支持任务调度(跟rabbitMQ可实现多种exchange。)
+
+
+说白了，它是一个分布式队列的管理工具，我们可以用 Celery 提供的接口快速实现并管理一个分布式的任务队列。
+
+        
+          <p class="article-more-link">
+            <a href="/2019/02/04/关于celery介绍/#more">Continue Reading →</a>
+          </p>
+        </div>
       
     </div>
     <footer class="entry-meta entry-footer">
       
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/python/">python</a>
+
       
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/django-celery/">django-celery</a></li></ul>
+
       
     </footer>
     <hr class="entry-footer-hr">
@@ -164,7 +172,7 @@
 <!-- Table of Contents -->
 
   
-    <article id="post-hello-world" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <article id="post-Continue-writing" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
     
     
@@ -172,7 +180,7 @@
         
   
     <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2019/02/01/hello-world/">Hello World</a>
+      <a class="article-title" href="/2019/02/04/Continue-writing/">Continue writing</a>
     </h1>
   
 
@@ -180,30 +188,34 @@
     
     <div class="article-meta">
       
-	<a href="/2019/02/01/hello-world/" class="article-date">
-	  <time datetime="2019-02-01T07:42:36.338Z" itemprop="datePublished">February 1, 2019</time>
+	<a href="/2019/02/04/Continue-writing/" class="article-date">
+	  <time datetime="2019-02-03T18:57:16.000Z" itemprop="datePublished">February 4, 2019</time>
 	</a>
 
-       
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/随记/">随记</a>
+ 
       
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+        <p> 从2017-8开始写自己的博客，主要是想对自己学习的东西做一个记录，为了方便后期解决问题查阅</p>
+<p> 经过两年的多的时间已经养成了习惯，与其说是博客用笔记更为恰当</p>
+<p>很可惜在前段时间电脑重装了下，仓库也没有备份，写一篇继续篇再次记录自己的学习路程</p>
+<p>开始于2019-2-4 大年三十</p>
 
       
     </div>
     <footer class="entry-meta entry-footer">
       
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/随记/">随记</a>
+
       
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/feelings/">feelings</a></li></ul>
+
       
     </footer>
     <hr class="entry-footer-hr">
@@ -269,22 +281,10 @@
 
     	<ul class="clearfix widget-social-icons">   
     	
-   			<li><a href="https://github.com/iTimeTraveler" title="Github"><i class="fa fa-github" aria-hidden="true"></i></a></li> 
+   			<li><a href="https://github.com/Jayzhanscar" title="Github"><i class="fa fa-github" aria-hidden="true"></i></a></li> 
 
    		
-   			<li><a href="" title="Weibo"><i class="fa fa-weibo" aria-hidden="true"></i></a></li> 
-
-   		
-   			<li><a href="" title="Twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a></li> 
-
-   		
-   			<li><a href="" title="Facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a></li> 
-
-   		
-   			<li><a href="" title="Google-plus"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li> 
-
-   		
-   			<li><a href="" title="Instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a></li> 
+   			<li><a href="http://weibo.com/Jayzhanscar" title="Weibo"><i class="fa fa-weibo" aria-hidden="true"></i></a></li> 
 
    		
    		</ul>
@@ -319,8 +319,8 @@
               <div class="widget-entry-summary" style="margin: 0;">
             
 
-              <h6 style="margin: 0;"><a href="/2019/02/01/test/">test</a></h6>
-              <span>February 1, 2019</span>
+              <h6 style="margin: 0;"><a href="/2019/02/04/关于celery介绍/">关于celery介绍</a></h6>
+              <span>February 4, 2019</span>
             </div>
 
           </li>
@@ -331,8 +331,8 @@
               <div class="widget-entry-summary" style="margin: 0;">
             
 
-              <h6 style="margin: 0;"><a href="/2019/02/01/hello-world/">Hello World</a></h6>
-              <span>February 1, 2019</span>
+              <h6 style="margin: 0;"><a href="/2019/02/04/Continue-writing/">Continue writing</a></h6>
+              <span>February 4, 2019</span>
             </div>
 
           </li>
@@ -343,12 +343,33 @@
 
   
     
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/随记/">随记</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
 
   
     
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/django-celery/">django-celery</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/feelings/">feelings</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
 
   
     
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/django-celery/" style="font-size: 10px;">django-celery</a> <a href="/tags/feelings/" style="font-size: 10px;">feelings</a>
+    </div>
+  </div>
+
   
     
   <div class="widget-wrap">
@@ -384,7 +405,7 @@
 
   <div class="clearfix container">
       <div class="site-info">
-	      &copy; 2019 Hexo All Rights Reserved.
+	      &copy; 2019 詹灵杰博客 All Rights Reserved.
         
             <span id="busuanzi_container_site_uv">
               本站访客数<span id="busuanzi_value_site_uv"></span>人次  
@@ -410,9 +431,6 @@
 
 
     <!-- headerblur min height -->
-    
-      var headerblur = document.getElementById("header-blur");
-      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
     
     
 </script>
