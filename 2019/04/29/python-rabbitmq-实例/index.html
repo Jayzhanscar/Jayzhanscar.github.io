@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>python_rabbitmq_实例 | 詹灵杰博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="rabbitmq">
+  
+  
+  
+  
+  <meta name="description" content="解耦：在项目启动之初是很难预测未来会遇到什么困难的，消息中间件在处理过程中插入了一个隐含的，基于数据的接口层，两边都实现这个接口，这样就允许独立的修改或者扩展两边的处理过程，只要两边遵守相同的接口约束即可。 冗余（存储）：在某些情况下处理数据的过程中会失败，消息中间件允许把数据持久化知道他们完全被处理 扩展性：消息中间件解耦了应用的过程，所以提供消息入队和处理的效率是很容易的，只需要增加处理流程">
+<meta name="keywords" content="rabbitmq">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python_rabbitmq_实例">
+<meta property="og:url" content="http://yoursite.com/2019/04/29/python-rabbitmq-实例/index.html">
+<meta property="og:site_name" content="詹灵杰博客">
+<meta property="og:description" content="解耦：在项目启动之初是很难预测未来会遇到什么困难的，消息中间件在处理过程中插入了一个隐含的，基于数据的接口层，两边都实现这个接口，这样就允许独立的修改或者扩展两边的处理过程，只要两边遵守相同的接口约束即可。 冗余（存储）：在某些情况下处理数据的过程中会失败，消息中间件允许把数据持久化知道他们完全被处理 扩展性：消息中间件解耦了应用的过程，所以提供消息入队和处理的效率是很容易的，只需要增加处理流程">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-04-29T08:28:54.939Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python_rabbitmq_实例">
+<meta name="twitter:description" content="解耦：在项目启动之初是很难预测未来会遇到什么困难的，消息中间件在处理过程中插入了一个隐含的，基于数据的接口层，两边都实现这个接口，这样就允许独立的修改或者扩展两边的处理过程，只要两边遵守相同的接口约束即可。 冗余（存储）：在某些情况下处理数据的过程中会失败，消息中间件允许把数据持久化知道他们完全被处理 扩展性：消息中间件解耦了应用的过程，所以提供消息入队和处理的效率是很容易的，只需要增加处理流程">
+  
+    <link rel="alternate" href="/atom.xml" title="詹灵杰博客" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css">
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+
+
+<header id="allheader" class="site-header" role="banner">
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home">
+                <img style="margin-bottom: 10px;" width="224px" height="124px" alt="Hike News" src="https://www.ymkgdesign.com/media/blog_logo.png">
+              </a>
+            
+          </h1>
+          
+          
+            <div class="site-description">当你真心渴望追求某种事物的话，整个宇宙都会联合起来帮你完成。  ——《牧羊少年奇幻之旅》</div>
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows" style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-python-rabbitmq-实例" style="width: 66%; float:left;" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      python_rabbitmq_实例
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2019/04/29/python-rabbitmq-实例/" class="article-date">
+	  <time datetime="2019-04-29T08:21:56.000Z" itemprop="datePublished">April 29, 2019</time>
+	</a>
+
+       
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ol>
+<li><strong>解耦</strong>：在项目启动之初是很难预测未来会遇到什么困难的，消息中间件在处理过程中插入了一个隐含的，基于数据的接口层，两边都实现这个接口，这样就允许独立的修改或者扩展两边的处理过程，只要两边遵守相同的接口约束即可。</li>
+<li><strong>冗余（存储）</strong>：在某些情况下处理数据的过程中会失败，消息中间件允许把数据持久化知道他们完全被处理</li>
+<li><strong>扩展性</strong>：消息中间件解耦了应用的过程，所以提供消息入队和处理的效率是很容易的，只需要增加处理流程就可以了。</li>
+<li><strong>削峰</strong>：在访问量剧增的情况下，但是应用仍然需要发挥作用，但是这样的突发流量并不常见。而使用消息中间件采用队列的形式可以减少突发访问压力，不会因为突发的超时负荷要求而崩溃</li>
+<li><strong>可恢复性</strong>：当系统一部分组件失效时，不会影响到整个系统。消息中间件降低了进程间的耦合性，当一个处理消息的进程挂掉后，加入消息中间件的消息仍然可以在系统恢复后重新处理</li>
+<li><strong>顺序保证</strong>：在大多数场景下，处理数据的顺序也很重要，大部分消息中间件支持一定的顺序性</li>
+<li><strong>缓冲</strong>：消息中间件通过一个缓冲层来帮助任务最高效率的执行</li>
+<li><p><strong>异步通信</strong>：通过把把消息发送给消息中间件，消息中间件并不立即处理它，后续在慢慢处理。</p>
+<a id="more"></a>
+<h3 id="服务端实例"><a href="#服务端实例" class="headerlink" title="服务端实例"></a>服务端实例</h3></li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line"><span class="keyword">import</span> pika</span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line">logger = logging.getLogger(__name__)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MqServer</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="string">""" mq服务端 """</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, host, port, username, password)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        初始化数据</span></span><br><span class="line"><span class="string">        :param host: 主机地址</span></span><br><span class="line"><span class="string">        :param port: 端口</span></span><br><span class="line"><span class="string">        :param username: 用户名</span></span><br><span class="line"><span class="string">        :param password: 密码</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        self.host = host</span><br><span class="line">        self.port = port</span><br><span class="line">        self.username = username</span><br><span class="line">        self.password = password</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">create_conn</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">""" 创建连接 """</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            credential = pika.PlainCredentials(self.username, self.password)</span><br><span class="line">            conn = pika.BlockingConnection(pika.ConnectionParameters(self.host, self.port, <span class="string">'/'</span>, credential))</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">return</span> conn</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            logging.warning(<span class="string">"&#123;&#125;, create mq failed, &#123;&#125;"</span>.format(datetime.datetime.now(), e))</span><br><span class="line">            </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">create_channel</span><span class="params">(self, con, queue, routing_key, body)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :param con: 连接obj</span></span><br><span class="line"><span class="string">        :param queue: 队列名</span></span><br><span class="line"><span class="string">        :param routing_key: routing_key</span></span><br><span class="line"><span class="string">        :param body: 消息主体</span></span><br><span class="line"><span class="string">        :return:</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        self.channel = con.channel()</span><br><span class="line">        self.channel.queue_declare(queue=queue)</span><br><span class="line">        <span class="comment"># delivery_mode 参数 2 保证队列中消息和任务也持久化 / 1 是非持久化</span></span><br><span class="line">        self.channel.basic_publish(exchange=<span class="string">''</span>, routing_key=routing_key, body=body,  properties=pika.BasicProperties(</span><br><span class="line">                         delivery_mode=<span class="number">2</span>  <span class="comment"># 使消息或任务也持久化存储</span></span><br><span class="line">                      ))</span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">create_fanout_channel</span><span class="params">(self, conn, message)</span>:</span></span><br><span class="line">        <span class="string">""" 创建广播模式频道 """</span></span><br><span class="line">        self.channel = conn.channel()</span><br><span class="line">        <span class="comment"># 定义交换机</span></span><br><span class="line">        self.channel.exchange_declare(exchange=<span class="string">'logs_fanout'</span>, exchange_type=<span class="string">'fanout'</span>)</span><br><span class="line">        <span class="comment">#  将消息发送到交换机, fanout模式下不用申明routing_key</span></span><br><span class="line">        self.channel.basic_publish(exchange=<span class="string">'logs_fanout'</span>, routing_key=<span class="string">''</span>, body=message)</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">create_direct_channel</span><span class="params">(self, conn, message, rounting_key)</span>:</span></span><br><span class="line">        <span class="string">""" 根据routing_key分发消息 """</span></span><br><span class="line">        self.channel = conn.channel()</span><br><span class="line">        <span class="comment"># 定义交换机名称类型</span></span><br><span class="line">        self.channel.exchange_declare(exchange=<span class="string">'direct_test'</span>, exchange_type=<span class="string">'direct'</span>)</span><br><span class="line">        <span class="comment"># 发布消息到交换机direct_test, 且发布的消息携带的关键字rounting_key 是info</span></span><br><span class="line">        self.channel.basic_publish(exchange=<span class="string">'direct_test'</span>, routing_key=rounting_key, body=message)</span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">close</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">""" 关闭频道 """</span></span><br><span class="line">        self.channel.close()</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    mq_server = MqServer(<span class="string">'localhost'</span>, <span class="number">5672</span>, <span class="string">'guest'</span>, <span class="string">'guest'</span>)</span><br><span class="line">    conn = mq_server.create_conn()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">        mq_server.create_fanout_channel(conn, <span class="string">'he34567llo'</span>)</span><br><span class="line">        mq_server.create_direct_channel(conn, <span class="string">'你好呀&#123;&#125;'</span>.format(str(i)), <span class="string">'haha'</span>)</span><br><span class="line"></span><br><span class="line">    mq_server.close()</span><br></pre></td></tr></table></figure>
+<h3 id="客户端实例"><a href="#客户端实例" class="headerlink" title="客户端实例"></a>客户端实例</h3> <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">import</span> pika</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MqClient</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="string">""" mq客户端 """</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, host, port, username, password)</span>:</span></span><br><span class="line">        <span class="string">""" 初始化 """</span></span><br><span class="line">        self.host = host</span><br><span class="line">        self.port = port</span><br><span class="line">        self.username = username</span><br><span class="line">        self.password = password</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">create_conn</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">""" 创建连接 """</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            credential = pika.PlainCredentials(self.username, self.password)</span><br><span class="line">            conn = pika.BlockingConnection(pika.ConnectionParameters(self.host, self.port, <span class="string">'/'</span>, credential))</span><br><span class="line">        </span><br><span class="line">            <span class="keyword">return</span> conn</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">         print(<span class="string">"&#123;&#125;, create mq failed, &#123;&#125;"</span>.format(datetime.datetime.now(), e))</span><br><span class="line">         </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">create_channel</span><span class="params">(self, queue)</span>:</span></span><br><span class="line">        <span class="string">""" 创建连接 """</span></span><br><span class="line">        connection = self.create_conn()</span><br><span class="line">        <span class="comment"># 声明消息队列，消息将在这个队列中进行传递。如果队列不存在，则创建</span></span><br><span class="line">        channel = connection.channel()</span><br><span class="line">        <span class="comment"># 声明消息队列，消息将在这个队列中进行传递。如果队列不存在，则创建</span></span><br><span class="line">        channel.queue_declare(queue=queue, durable=<span class="keyword">True</span>)</span><br><span class="line">        <span class="comment"># 告诉rabbitmq使用callback来接收信息</span></span><br><span class="line">        channel.basic_consume(queue, on_message_callback=self.call, auto_ack=<span class="keyword">False</span>)</span><br><span class="line">        <span class="comment"># no_ack=True表示在回调函数中不需要发送确认标识</span></span><br><span class="line">        print(<span class="string">' [*] Waiting for messages. To exit press CTRL+C'</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 开始接收信息，并进入阻塞状态，队列里有信息才会调用callback进行处理。按ctrl+c退出。</span></span><br><span class="line">        channel.start_consuming()</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">create_fanout_conn</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">""" 创建广播模式"""</span></span><br><span class="line">        connection = self.create_conn()</span><br><span class="line">        channel = connection.channel()</span><br><span class="line">        channel.exchange_declare(<span class="string">'logs_fanout'</span>, exchange_type=<span class="string">'fanout'</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 创建随机队列, exclusive=True表示建立临时队列， 当consume关闭后，该队列就会被删除</span></span><br><span class="line">        result = channel.queue_declare(exclusive=<span class="keyword">True</span>)</span><br><span class="line">        queue_name = result.method.queue</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 将队列和exchange绑定</span></span><br><span class="line">        channel.queue_bind(exchange=<span class="string">'logs_fanout'</span>, queue=queue_name)</span><br><span class="line">        </span><br><span class="line">        channel.basic_consume(self.call, queue=queue_name, no_ack=<span class="keyword">False</span>)</span><br><span class="line">        print(<span class="string">'进入消息等待状态。。。'</span>)</span><br><span class="line">        <span class="comment"># 开始接收信息，并进入阻塞状态，队列里有信息才会调用callback进行处理。按ctrl+c退出。</span></span><br><span class="line">        channel.start_consuming()</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">create_direct_conn</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""" 创建routing_key """</span></span><br><span class="line">        connection = self.create_conn()</span><br><span class="line">        channel = connection.channel()</span><br><span class="line">        channel.exchange_declare(<span class="string">'direct_test'</span>, exchange_type=<span class="string">'direct'</span>)</span><br><span class="line"></span><br><span class="line">        result = channel.queue_declare(exclusive=<span class="keyword">True</span>)</span><br><span class="line">        queue_name = result.method.queue</span><br><span class="line">        <span class="comment"># 生成随机队列</span></span><br><span class="line">        severities = [<span class="string">'error'</span>, <span class="string">'haha'</span>]</span><br><span class="line">        <span class="keyword">for</span> severity <span class="keyword">in</span> severities:</span><br><span class="line">            channel.queue_bind(exchange=<span class="string">'direct_test'</span>, queue=queue_name, routing_key=severity)</span><br><span class="line"></span><br><span class="line">        channel.basic_consume(self.call, queue=queue_name, no_ack=<span class="keyword">False</span>)</span><br><span class="line">        print(<span class="string">'进入消息等待状态。。。'</span>)</span><br><span class="line">        <span class="comment"># 开始接收信息，并进入阻塞状态，队列里有信息才会调用callback进行处理。按ctrl+c退出。</span></span><br><span class="line">        channel.start_consuming()</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">create_topic_conn</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">""" 主题订阅模式</span></span><br><span class="line"><span class="string">        topic模式和direct模式大致相同, 在routing_key中可以用正则去模糊匹配</span></span><br><span class="line"><span class="string">        exchange 模式定义为 direct</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">call</span><span class="params">(self, ch, method, properties, body)</span>:</span></span><br><span class="line">        <span class="string">""" 消息任务回调函数 """</span></span><br><span class="line">        print(<span class="string">" [x] Received %r"</span> % body.decode(<span class="string">'utf-8'</span>))</span><br><span class="line">        <span class="keyword">import</span> time</span><br><span class="line">        <span class="keyword">import</span> random</span><br><span class="line">        time.sleep(random.random())</span><br><span class="line">        <span class="comment"># no_ack = False 则开启消息反馈机制</span></span><br><span class="line">        ch.basic_ack(delivery_tag=method.delivery_tag)</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    mq_client = MqClient(<span class="string">'localhost'</span>, <span class="number">5672</span>, <span class="string">'guest'</span>, <span class="string">'guest'</span>)</span><br><span class="line">    mq_client.create_direct_conn()</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/rabbitmq/">rabbitmq</a></li></ul>
+
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8yOTQ4MS82MDQ5">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/04/12/实用的文档/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">实用的文档</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#服务端实例"><span class="nav-number">1.</span> <span class="nav-text">服务端实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#客户端实例"><span class="nav-number">2.</span> <span class="nav-text">客户端实例</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2019 詹灵杰博客 All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script>
+</body>
+</html>
