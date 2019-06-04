@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>Josephus问题多重解 | 詹灵杰博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="-algorithm">
+  
+  
+  
+  
+  <meta name="description" content="问题描述:Josephubs(约瑟夫环)：假设有n个人围坐一圈， 现在要求从k个人开始报数， 报到第m个数的人退出。然后从下一个人开始继续报数并按同样规则退出，直到所有人退出。要求按顺序输出各出列人的编号">
+<meta name="keywords" content="-algorithm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Josephus问题多重解">
+<meta property="og:url" content="http://yoursite.com/2019/05/30/Josephus问题多重解/index.html">
+<meta property="og:site_name" content="詹灵杰博客">
+<meta property="og:description" content="问题描述:Josephubs(约瑟夫环)：假设有n个人围坐一圈， 现在要求从k个人开始报数， 报到第m个数的人退出。然后从下一个人开始继续报数并按同样规则退出，直到所有人退出。要求按顺序输出各出列人的编号">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-06-04T11:09:55.841Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Josephus问题多重解">
+<meta name="twitter:description" content="问题描述:Josephubs(约瑟夫环)：假设有n个人围坐一圈， 现在要求从k个人开始报数， 报到第m个数的人退出。然后从下一个人开始继续报数并按同样规则退出，直到所有人退出。要求按顺序输出各出列人的编号">
+  
+    <link rel="alternate" href="/atom.xml" title="詹灵杰博客" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css">
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+
+
+<header id="allheader" class="site-header" role="banner">
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home">
+                <img style="margin-bottom: 10px;" width="224px" height="124px" alt="Hike News" src="https://www.ymkgdesign.com/media/blog_logo.png">
+              </a>
+            
+          </h1>
+          
+          
+            <div class="site-description">当你真心渴望追求某种事物的话，整个宇宙都会联合起来帮你完成。  ——《牧羊少年奇幻之旅》</div>
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows" style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-Josephus问题多重解" style="width: 66%; float:left;" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      Josephus问题多重解
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2019/05/30/Josephus问题多重解/" class="article-date">
+	  <time datetime="2019-05-30T03:10:32.000Z" itemprop="datePublished">May 30, 2019</time>
+	</a>
+
+       
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述:"></a>问题描述:</h3><p><strong>Josephubs(约瑟夫环)：假设有n个人围坐一圈， 现在要求从k个人开始报数， 报到第m个数的人退出。然后从下一个人开始继续报数并按同样规则退出，直到所有人退出。要求按顺序输出各出列人的编号</strong></p>
+<a id="more"></a>
+<h3 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析:"></a>问题分析:</h3><ul>
+<li><p><strong>初始</strong></p>
+<ul>
+<li>建立一个包含n个人(的编号)的表。</li>
+<li>找到第k个人， 那里开始。</li>
+</ul>
+</li>
+<li><p><strong>处理过程中采用把相应表元素修改为0的方式表示已出列， 反复做</strong>:</p>
+<ul>
+<li>数m个人(尚在座的人)，遇到表的末端就转回下标0继续。</li>
+<li>把表示第m个人的 表元素修改为0。</li>
+</ul>
+</li>
+<li><p><strong>n个人出列即结束</strong></p>
+</li>
+</ul>
+<h4 id="采用python自带的list-ADT模块"><a href="#采用python自带的list-ADT模块" class="headerlink" title="采用python自带的list ADT模块"></a>采用python自带的list ADT模块</h4><p>思路描述：创建一个list， 当第m个位置被排出的时候该元素位置为0， 那么下次继续设置初始下标为 i+1  % n , count用于统计， 确定在排出所有空位置之后的真实第m个位置。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">josephus</span><span class="params">(n, k, m)</span>:</span></span><br><span class="line">    people_num = list(range(<span class="number">1</span>, n + <span class="number">1</span>))</span><br><span class="line">    print(people_num)</span><br><span class="line">    i = k - <span class="number">1</span>  <span class="comment"># 第k个人的下标值</span></span><br><span class="line">    <span class="keyword">for</span> num <span class="keyword">in</span> range(n):</span><br><span class="line">        count = <span class="number">0</span>  <span class="comment"># 用于计算是第几个人</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span> count &lt; m:</span><br><span class="line">            <span class="keyword">if</span> people_num[i] != <span class="number">0</span>:</span><br><span class="line">                count += <span class="number">1</span></span><br><span class="line">           </span><br><span class="line">            <span class="keyword">if</span> m == count:</span><br><span class="line">                print(<span class="string">"找到该同学为:&#123;&#125;"</span>.format(people_num[i]))</span><br><span class="line">                people_num[i] = <span class="number">0</span></span><br><span class="line">            i = (i+<span class="number">1</span>) % n <span class="comment"># 下标反转， 第二次查找时由于前面排出一个同学，所以需要+1</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> num &lt; n<span class="number">-1</span>:</span><br><span class="line">            print(<span class="string">'第&#123;&#125;次查找结束'</span>.format(num))</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            print(<span class="string">'结束'</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>时间复杂度分析</strong><ul>
+<li>当m=1的时候， 内循环每次只要执行一次，所以内循环的时间复杂度为O(1), 所以综合时间度为O(n)</li>
+<li>当 m = n时，那么内循环需要把整个表遍历一遍，之后需要执行 <strong>i = (i+1) % n</strong> 语句,所以它的时间复杂度为O(n2)。</li>
+</ul>
+</li>
+</ul>
+<h4 id="基于顺序表的解"><a href="#基于顺序表的解" class="headerlink" title="基于顺序表的解"></a>基于顺序表的解</h4><p>设计思路：用python list 的pop取出需要元素， 重新计算i值， </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">josephus1</span><span class="params">(n, k, m)</span>:</span></span><br><span class="line">    people_num = list(range(<span class="number">1</span>, n + <span class="number">1</span>))</span><br><span class="line">    num, i = n, k<span class="number">-1</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> num <span class="keyword">in</span> range(n, <span class="number">0</span>, <span class="number">-1</span>): <span class="comment"># 倒排</span></span><br><span class="line">        i = (i + m - <span class="number">1</span>) % num</span><br><span class="line">        print(<span class="string">'第&#123;&#125;同学被排出'</span>.format(people_num.pop(i)))</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><strong>时间复杂度分析</strong></p>
+<p>  该算法用了一个for循环，时间复杂度为O(n), python list pop()方法也是O(n),所以该方法的综合时间复杂度还是O(n2)</p>
+</li>
+</ul>
+<h4 id="基于循环单链表的解"><a href="#基于循环单链表的解" class="headerlink" title="基于循环单链表的解"></a>基于循环单链表的解</h4><p>设计思路： 把围坐一圈的人当成循环链表， 通过next连接，先到初始第k后第m个next时， 删除该节点， 因为是循环节点， 所以可以按照节点顺序依次执行下去， 直到删除最后一个元素</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># 首先要创建一个简单的链表节点</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LNode</span><span class="params">(object)</span>:</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, elem, next_=None)</span></span></span><br><span class="line">		self.elem = elem</span><br><span class="line">		self.next = next_</span><br><span class="line"></span><br><span class="line"><span class="comment"># 循环单链表基类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LClist</span><span class="params">(objects)</span>:</span></span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">		self._rear = <span class="keyword">None</span></span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">is_empty</span><span class="params">(self)</span>:</span></span><br><span class="line">		<span class="keyword">return</span> self._rear <span class="keyword">is</span> <span class="keyword">None</span></span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">prepend</span><span class="params">(self, elem)</span>:</span></span><br><span class="line">		<span class="string">""" 从头部加入 """</span></span><br><span class="line">		p = LNode(elem)</span><br><span class="line">		<span class="keyword">if</span> self._rear <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">			p.next = p <span class="comment"># 单节点组成环</span></span><br><span class="line">			self._rear.next = p</span><br><span class="line">		<span class="keyword">else</span>:</span><br><span class="line">			p.next = self._rear.next</span><br><span class="line">			self._rear.next = p</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">append</span><span class="params">(self, elem)</span>:</span></span><br><span class="line">		<span class="string">""" 从尾部插入 """</span></span><br><span class="line">		self. prepend(elem)</span><br><span class="line">		self._rear = self._rear.next</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">pop</span><span class="params">(self)</span>:</span></span><br><span class="line">		<span class="string">""" 头部弹出 """</span></span><br><span class="line">		<span class="keyword">if</span> self._rear._rear <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">False</span></span><br><span class="line">		</span><br><span class="line">		p = self._rear.next:</span><br><span class="line">		<span class="keyword">if</span> self._reear <span class="keyword">is</span> p:</span><br><span class="line">			self._rear = <span class="keyword">None</span></span><br><span class="line">		<span class="keyword">else</span>:</span><br><span class="line">			self._rear = <span class="keyword">None</span></span><br><span class="line">		</span><br><span class="line">		<span class="keyword">return</span> p.elem</span><br><span class="line">	</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Josehups</span><span class="params">(LCList)</span>:</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">turn</span><span class="params">(self, m)</span>:</span></span><br><span class="line">		<span class="keyword">for</span> i <span class="keyword">in</span> range(m):</span><br><span class="line">			self._rear = self._rear.next</span><br><span class="line">		</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, n, k, m)</span>:</span></span><br><span class="line">		LCList.__init__(self)</span><br><span class="line">		<span class="keyword">for</span> i <span class="keyword">in</span> range(n):</span><br><span class="line">			self.append(i+<span class="number">1</span>)</span><br><span class="line">		</span><br><span class="line">		self.turn(k<span class="number">-1</span>)</span><br><span class="line">		<span class="keyword">while</span> <span class="keyword">not</span> self.is_empty():</span><br><span class="line">			self.turn(m<span class="number">-1</span>)</span><br><span class="line">			print(self.pop() <span class="keyword">if</span> self.is_empty() <span class="keyword">else</span> <span class="string">""</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><strong>时间复杂度分析</strong></p>
+<p>  初建表的复杂度为O(n), 后面循环的算法复杂度为O(m x n)， 每次旋转的时间复杂度为O()</p>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/algorithm/">-algorithm</a></li></ul>
+
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8yOTQ4MS82MDQ5">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/05/23/关于顺序表的理解/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">关于顺序表的理解</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题描述"><span class="nav-number">1.</span> <span class="nav-text">问题描述:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题分析"><span class="nav-number">2.</span> <span class="nav-text">问题分析:</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#采用python自带的list-ADT模块"><span class="nav-number">2.1.</span> <span class="nav-text">采用python自带的list ADT模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基于顺序表的解"><span class="nav-number">2.2.</span> <span class="nav-text">基于顺序表的解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基于循环单链表的解"><span class="nav-number">2.3.</span> <span class="nav-text">基于循环单链表的解</span></a></li></ol></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2019 詹灵杰博客 All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script>
+</body>
+</html>
