@@ -11,22 +11,22 @@
   
   
   
-  <meta name="description" content="在项目部署上线的时候，除了bug的修复最重要的还是数据的安全，为了防止一些特殊情况的发生，我们会采用一些容灾备份的方案，在正常运行的情况下也需要对数据库进行备份， 相对于冷备份，热备份和热拷贝实时性是比较高的。有时候为了提供数据库的性能也会读写分离，实际方案也有很多种，比如master-slave备份机制， master-master 备份机制等等。主从备份 准备工作   主机A : 39.96.">
+  <meta name="description" content="在项目部署上线的时候，除了bug的修复最重要的还是数据的安全，为了防止一些特殊情况的发生，我们会采用一些容灾备份的方案，在正常运行的情况下也需要对数据库进行备份， 相对于冷备份，热备份和热拷贝实时性是比较高的。有时候为了提供数据库的性能也会读写分离，实际方案也有很多种，比如master-slave备份机制， master-master 备份机制等等。">
 <meta name="keywords" content="mysql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="mysql双机热备实现">
 <meta property="og:url" content="http://yoursite.com/2019/06/11/mysql双机热备实现/index.html">
 <meta property="og:site_name" content="詹灵杰博客">
-<meta property="og:description" content="在项目部署上线的时候，除了bug的修复最重要的还是数据的安全，为了防止一些特殊情况的发生，我们会采用一些容灾备份的方案，在正常运行的情况下也需要对数据库进行备份， 相对于冷备份，热备份和热拷贝实时性是比较高的。有时候为了提供数据库的性能也会读写分离，实际方案也有很多种，比如master-slave备份机制， master-master 备份机制等等。主从备份 准备工作   主机A : 39.96.">
+<meta property="og:description" content="在项目部署上线的时候，除了bug的修复最重要的还是数据的安全，为了防止一些特殊情况的发生，我们会采用一些容灾备份的方案，在正常运行的情况下也需要对数据库进行备份， 相对于冷备份，热备份和热拷贝实时性是比较高的。有时候为了提供数据库的性能也会读写分离，实际方案也有很多种，比如master-slave备份机制， master-master 备份机制等等。">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2019/06/11/mysql双机热备实现/mysql双机热备实现/master1.png">
 <meta property="og:image" content="http://yoursite.com/2019/06/11/mysql双机热备实现/mysql双机热备实现/master2.png">
 <meta property="og:image" content="http://yoursite.com/2019/06/11/mysql双机热备实现/mysql双机热备实现/slave1.png">
 <meta property="og:image" content="http://yoursite.com/2019/06/11/mysql双机热备实现/mysql双机热备实现/slave2.png">
-<meta property="og:updated_time" content="2019-06-11T07:07:31.310Z">
+<meta property="og:updated_time" content="2019-06-11T07:10:08.876Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mysql双机热备实现">
-<meta name="twitter:description" content="在项目部署上线的时候，除了bug的修复最重要的还是数据的安全，为了防止一些特殊情况的发生，我们会采用一些容灾备份的方案，在正常运行的情况下也需要对数据库进行备份， 相对于冷备份，热备份和热拷贝实时性是比较高的。有时候为了提供数据库的性能也会读写分离，实际方案也有很多种，比如master-slave备份机制， master-master 备份机制等等。主从备份 准备工作   主机A : 39.96.">
+<meta name="twitter:description" content="在项目部署上线的时候，除了bug的修复最重要的还是数据的安全，为了防止一些特殊情况的发生，我们会采用一些容灾备份的方案，在正常运行的情况下也需要对数据库进行备份， 相对于冷备份，热备份和热拷贝实时性是比较高的。有时候为了提供数据库的性能也会读写分离，实际方案也有很多种，比如master-slave备份机制， master-master 备份机制等等。">
 <meta name="twitter:image" content="http://yoursite.com/2019/06/11/mysql双机热备实现/mysql双机热备实现/master1.png">
   
     <link rel="alternate" href="/atom.xml" title="詹灵杰博客" type="application/atom+xml">
@@ -142,7 +142,8 @@
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <h4 id="在项目部署上线的时候，除了bug的修复最重要的还是数据的安全，为了防止一些特殊情况的发生，我们会采用一些容灾备份的方案，在正常运行的情况下也需要对数据库进行备份，-相对于冷备份，热备份和热拷贝实时性是比较高的。有时候为了提供数据库的性能也会读写分离，实际方案也有很多种，比如master-slave备份机制，-master-master-备份机制等等。"><a href="#在项目部署上线的时候，除了bug的修复最重要的还是数据的安全，为了防止一些特殊情况的发生，我们会采用一些容灾备份的方案，在正常运行的情况下也需要对数据库进行备份，-相对于冷备份，热备份和热拷贝实时性是比较高的。有时候为了提供数据库的性能也会读写分离，实际方案也有很多种，比如master-slave备份机制，-master-master-备份机制等等。" class="headerlink" title="在项目部署上线的时候，除了bug的修复最重要的还是数据的安全，为了防止一些特殊情况的发生，我们会采用一些容灾备份的方案，在正常运行的情况下也需要对数据库进行备份， 相对于冷备份，热备份和热拷贝实时性是比较高的。有时候为了提供数据库的性能也会读写分离，实际方案也有很多种，比如master-slave备份机制， master-master 备份机制等等。"></a>在项目部署上线的时候，除了bug的修复最重要的还是数据的安全，为了防止一些特殊情况的发生，我们会采用一些容灾备份的方案，在正常运行的情况下也需要对数据库进行备份， 相对于冷备份，热备份和热拷贝实时性是比较高的。有时候为了提供数据库的性能也会读写分离，实际方案也有很多种，比如master-slave备份机制， master-master 备份机制等等。</h4><h3 id="主从备份"><a href="#主从备份" class="headerlink" title="主从备份"></a>主从备份</h3><ul>
+        <h4 id="在项目部署上线的时候，除了bug的修复最重要的还是数据的安全，为了防止一些特殊情况的发生，我们会采用一些容灾备份的方案，在正常运行的情况下也需要对数据库进行备份，-相对于冷备份，热备份和热拷贝实时性是比较高的。有时候为了提供数据库的性能也会读写分离，实际方案也有很多种，比如master-slave备份机制，-master-master-备份机制等等。"><a href="#在项目部署上线的时候，除了bug的修复最重要的还是数据的安全，为了防止一些特殊情况的发生，我们会采用一些容灾备份的方案，在正常运行的情况下也需要对数据库进行备份，-相对于冷备份，热备份和热拷贝实时性是比较高的。有时候为了提供数据库的性能也会读写分离，实际方案也有很多种，比如master-slave备份机制，-master-master-备份机制等等。" class="headerlink" title="在项目部署上线的时候，除了bug的修复最重要的还是数据的安全，为了防止一些特殊情况的发生，我们会采用一些容灾备份的方案，在正常运行的情况下也需要对数据库进行备份， 相对于冷备份，热备份和热拷贝实时性是比较高的。有时候为了提供数据库的性能也会读写分离，实际方案也有很多种，比如master-slave备份机制， master-master 备份机制等等。"></a>在项目部署上线的时候，除了bug的修复最重要的还是数据的安全，为了防止一些特殊情况的发生，我们会采用一些容灾备份的方案，在正常运行的情况下也需要对数据库进行备份， 相对于冷备份，热备份和热拷贝实时性是比较高的。有时候为了提供数据库的性能也会读写分离，实际方案也有很多种，比如master-slave备份机制， master-master 备份机制等等。</h4><a id="more"></a>
+<h3 id="主从备份"><a href="#主从备份" class="headerlink" title="主从备份"></a>主从备份</h3><ul>
 <li><font color="#0099ff" face="黑体">准备工作</font>
 
 <ul>
@@ -175,7 +176,8 @@
 <h5 id="查看slave服务器状态"><a href="#查看slave服务器状态" class="headerlink" title="查看slave服务器状态"></a>查看slave服务器状态</h5><p><strong>查看到Salv_IO_Running = Yes</strong></p>
 <p><strong>查看到Salv_SQL_Running = Yes</strong></p>
 <p><img src="mysql双机热备实现/slave2.png" alt=""></p>
-<h4 id="测试同步"><a href="#测试同步" class="headerlink" title="测试同步"></a>测试同步</h4>
+<h4 id="测试同步"><a href="#测试同步" class="headerlink" title="测试同步"></a>测试同步</h4><p>在主机A中表插入数据， 主机B自动同步则成功了。</p>
+
       
     </div>
     <footer class="entry-meta entry-footer">
