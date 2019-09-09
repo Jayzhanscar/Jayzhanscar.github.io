@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
   
   <title>mysql双机热备实现 | 詹灵杰博客</title>
@@ -23,7 +23,7 @@
 <meta property="og:image" content="https://blog.jayzhan.cn/2019/06/11/mysql双机热备实现/master2.png">
 <meta property="og:image" content="https://blog.jayzhan.cn/2019/06/11/mysql双机热备实现/slave1.png">
 <meta property="og:image" content="https://blog.jayzhan.cn/2019/06/11/mysql双机热备实现/slave2.png">
-<meta property="og:updated_time" content="2019-06-11T08:33:51.474Z">
+<meta property="og:updated_time" content="2019-06-11T08:33:51.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mysql双机热备实现">
 <meta name="twitter:description" content="在项目部署上线的时候，除了bug的修复最重要的还是数据的安全，为了防止一些特殊情况的发生，我们会采用一些容灾备份的方案，在正常运行的情况下也需要对数据库进行备份， 相对于冷备份，热备份和热拷贝实时性是比较高的。有时候为了提供数据库的性能也会读写分离，实际方案也有很多种，比如master-slave备份机制， master-master 备份机制等等。">
@@ -66,14 +66,15 @@
   
 
 
-<header id="allheader" class="site-header" role="banner">
+<header id="allheader" class="site-header" role="banner" 
+   >
   <div class="clearfix container">
       <div class="site-branding">
 
           <h1 class="site-title">
             
-              <a href="/" rel="home">
-                <img style="margin-bottom: 10px;" width="224px" height="124px" alt="Hike News" src="https://www.ymkgdesign.com/media/blog_logo.png">
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="224px" height="124px" alt="Hike News" src="https://www.ymkgdesign.com/media/blog_logo.png">
               </a>
             
           </h1>
@@ -87,7 +88,7 @@
             <a class="nav-close">Close</a>
 
             <div class="clearfix sf-menu">
-              <ul id="main-nav" class="menu sf-js-enabled sf-arrows" style="touch-action: pan-y;">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
                     
                       <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
                     
@@ -113,14 +114,14 @@
             
       <div id="content" class="outer">
         
-          <section id="main" style="float:none;"><article id="post-mysql双机热备实现" style="width: 66%; float:left;" class="article article-type-post" itemscope="" itemprop="blogPost">
+          <section id="main" style="float:none;"><article id="post-mysql双机热备实现" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
     
     
       <header class="article-header">
         
   
-    <h1 class="thumb" itemprop="name">
+    <h1 class="thumb" class="article-title" itemprop="name">
       mysql双机热备实现
     </h1>
   
@@ -219,6 +220,15 @@
     
 <nav id="article-nav">
   
+    <a href="/2019/09/09/关于python的迭代器和生成器/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          关于python的迭代器和生成器
+        
+      </div>
+    </a>
+  
   
     <a href="/2019/06/05/2019-6-5阶段总结/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
@@ -236,9 +246,9 @@
     <div id="toc" class="toc-article">
     <strong class="toc-title">Contents</strong>
     
-      <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#在项目部署上线的时候，除了bug的修复最重要的还是数据的安全，为了防止一些特殊情况的发生，我们会采用一些容灾备份的方案，在正常运行的情况下也需要对数据库进行备份，-相对于冷备份，热备份和热拷贝实时性是比较高的。有时候为了提供数据库的性能也会读写分离，实际方案也有很多种，比如master-slave备份机制，-master-master-备份机制等等。"><span class="nav-number">1.</span> <span class="nav-text">在项目部署上线的时候，除了bug的修复最重要的还是数据的安全，为了防止一些特殊情况的发生，我们会采用一些容灾备份的方案，在正常运行的情况下也需要对数据库进行备份， 相对于冷备份，热备份和热拷贝实时性是比较高的。有时候为了提供数据库的性能也会读写分离，实际方案也有很多种，比如master-slave备份机制， master-master 备份机制等等。</span></a></li></ol><li class="nav-item nav-level-3"><a class="nav-link" href="#主从备份"><span class="nav-number"></span> <span class="nav-text">主从备份</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#配置基本表："><span class="nav-number">1.</span> <span class="nav-text">配置基本表：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#主机A配置"><span class="nav-number">2.</span> <span class="nav-text">主机A配置</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#创建同步用户-user-replicate"><span class="nav-number">2.1.</span> <span class="nav-text">创建同步用户(user replicate)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#修改mysql-配置文件"><span class="nav-number">2.2.</span> <span class="nav-text">修改mysql 配置文件</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#主机B配置"><span class="nav-number">3.</span> <span class="nav-text">主机B配置</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#同样修改配置文件并重启数据库"><span class="nav-number">3.1.</span> <span class="nav-text">同样修改配置文件并重启数据库</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#用change-master-语句指定同步位置"><span class="nav-number">3.2.</span> <span class="nav-text">用change master 语句指定同步位置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#查看slave服务器状态"><span class="nav-number">3.3.</span> <span class="nav-text">查看slave服务器状态</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测试同步"><span class="nav-number">4.</span> <span class="nav-text">测试同步</span></a></li></ol>
+      <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#在项目部署上线的时候，除了bug的修复最重要的还是数据的安全，为了防止一些特殊情况的发生，我们会采用一些容灾备份的方案，在正常运行的情况下也需要对数据库进行备份，-相对于冷备份，热备份和热拷贝实时性是比较高的。有时候为了提供数据库的性能也会读写分离，实际方案也有很多种，比如master-slave备份机制，-master-master-备份机制等等。"><span class="nav-number">1.</span> <span class="nav-text">在项目部署上线的时候，除了bug的修复最重要的还是数据的安全，为了防止一些特殊情况的发生，我们会采用一些容灾备份的方案，在正常运行的情况下也需要对数据库进行备份， 相对于冷备份，热备份和热拷贝实时性是比较高的。有时候为了提供数据库的性能也会读写分离，实际方案也有很多种，比如master-slave备份机制， master-master 备份机制等等。</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主从备份"><span class="nav-number"></span> <span class="nav-text">主从备份</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#配置基本表："><span class="nav-number">1.</span> <span class="nav-text">配置基本表：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#主机A配置"><span class="nav-number">2.</span> <span class="nav-text">主机A配置</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#创建同步用户-user-replicate"><span class="nav-number">2.1.</span> <span class="nav-text">创建同步用户(user replicate)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#修改mysql-配置文件"><span class="nav-number">2.2.</span> <span class="nav-text">修改mysql 配置文件</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#主机B配置"><span class="nav-number">3.</span> <span class="nav-text">主机B配置</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#同样修改配置文件并重启数据库"><span class="nav-number">3.1.</span> <span class="nav-text">同样修改配置文件并重启数据库</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#用change-master-语句指定同步位置"><span class="nav-number">3.2.</span> <span class="nav-text">用change master 语句指定同步位置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#查看slave服务器状态"><span class="nav-number">3.3.</span> <span class="nav-text">查看slave服务器状态</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测试同步"><span class="nav-number">4.</span> <span class="nav-text">测试同步</span></a></li></ol>
     
-    </li></div>
+    </div>
   </aside>
 </section>
         
@@ -268,7 +278,7 @@
           <span id="busuanzi_container_site_uv"> 
           <span id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</span>
 
-          </span></div>
+          </div>
   </div>
 </footer>
 
@@ -347,7 +357,7 @@
 	// <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
 	<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
-	
+	</script>
 
 
 
