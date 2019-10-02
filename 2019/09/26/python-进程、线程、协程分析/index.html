@@ -3,23 +3,33 @@
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
   
-  <title>Page 1 | 詹灵杰博客</title>
+  <title>python 进程、线程、协程分析----- 线程篇 | 詹灵杰博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
+  <meta name="keywords" content="python">
   
   
   
-  <meta name="description" content="当你真心渴望追求某种事物的话，整个宇宙都会联合起来帮你完成。  ——《牧羊少年奇幻之旅》">
-<meta name="keywords" content="jay">
-<meta property="og:type" content="website">
-<meta property="og:title" content="詹灵杰博客">
-<meta property="og:url" content="https://blog.jayzhan.cn/index.html">
+  
+  <meta name="description" content="python作为动态脚本解释性语言，在编译速度上面一直是被诟病的地方，很多时候在群里面大家对于python的性能都有着很多的质疑， 其实通过一些优化还是可以让py程序变得很高效。  一. 从线程开始讲起 ####介绍   &amp;emsp;&amp;emsp;在python中如果说起多线程肯定是会被认为是伪多线程，因为python在1989年圣诞节诞生的时候计算机硬件并没有那么发达，计算机也都是单核存在，所以">
+<meta name="keywords" content="python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python 进程、线程、协程分析----- 线程篇">
+<meta property="og:url" content="https://blog.jayzhan.cn/2019/09/26/python-进程、线程、协程分析/index.html">
 <meta property="og:site_name" content="詹灵杰博客">
-<meta property="og:description" content="当你真心渴望追求某种事物的话，整个宇宙都会联合起来帮你完成。  ——《牧羊少年奇幻之旅》">
+<meta property="og:description" content="python作为动态脚本解释性语言，在编译速度上面一直是被诟病的地方，很多时候在群里面大家对于python的性能都有着很多的质疑， 其实通过一些优化还是可以让py程序变得很高效。  一. 从线程开始讲起 ####介绍   &amp;emsp;&amp;emsp;在python中如果说起多线程肯定是会被认为是伪多线程，因为python在1989年圣诞节诞生的时候计算机硬件并没有那么发达，计算机也都是单核存在，所以">
 <meta property="og:locale" content="default">
+<meta property="og:image" content="https://blog.jayzhan.cn/2019/09/26/python-进程、线程、协程分析/code2.png">
+<meta property="og:image" content="https://blog.jayzhan.cn/2019/09/26/python-进程、线程、协程分析/code3.png">
+<meta property="og:image" content="https://blog.jayzhan.cn/2019/09/26/python-进程、线程、协程分析/code4.png">
+<meta property="og:image" content="https://blog.jayzhan.cn/2019/09/26/python-进程、线程、协程分析/code5.png">
+<meta property="og:image" content="https://blog.jayzhan.cn/2019/09/26/python-进程、线程、协程分析/code6.png">
+<meta property="og:image" content="https://blog.jayzhan.cn/2019/09/26/python-进程、线程、协程分析/code7.png">
+<meta property="og:updated_time" content="2019-10-02T17:30:21.399Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="詹灵杰博客">
-<meta name="twitter:description" content="当你真心渴望追求某种事物的话，整个宇宙都会联合起来帮你完成。  ——《牧羊少年奇幻之旅》">
+<meta name="twitter:title" content="python 进程、线程、协程分析----- 线程篇">
+<meta name="twitter:description" content="python作为动态脚本解释性语言，在编译速度上面一直是被诟病的地方，很多时候在群里面大家对于python的性能都有着很多的质疑， 其实通过一些优化还是可以让py程序变得很高效。  一. 从线程开始讲起 ####介绍   &amp;emsp;&amp;emsp;在python中如果说起多线程肯定是会被认为是伪多线程，因为python在1989年圣诞节诞生的时候计算机硬件并没有那么发达，计算机也都是单核存在，所以">
+<meta name="twitter:image" content="https://blog.jayzhan.cn/2019/09/26/python-进程、线程、协程分析/code2.png">
   
     <link rel="alternate" href="/atom.xml" title="詹灵杰博客" type="application/atom+xml">
   
@@ -52,7 +62,7 @@
 </html>
 
 
-  <body>
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
 
 
   
@@ -106,17 +116,15 @@
             
       <div id="content" class="outer">
         
-          <section id="main">
-  
-    <article id="post-python-进程、线程、协程分析"  class="article article-type-post" itemscope itemprop="blogPost" >
+          <section id="main" style="float:none;"><article id="post-python-进程、线程、协程分析" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
     
     
       <header class="article-header">
         
   
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2019/09/26/python-进程、线程、协程分析/">python 进程、线程、协程分析----- 线程篇</a>
+    <h1 class="thumb" class="article-title" itemprop="name">
+      python 进程、线程、协程分析----- 线程篇
     </h1>
   
 
@@ -130,6 +138,10 @@
 
        
       
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
     </div>
     <div class="article-entry" itemprop="articleBody">
       
@@ -308,724 +320,60 @@ Available为空闲资源数量，即资源池（注意：资源池的剩余资�
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li></ul>
 
       
-    </footer>
-    <hr class="entry-footer-hr">
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-  
-    <article id="post-关于python的迭代器和生成器"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
-    
-    
-      <header class="article-header">
         
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2019/09/09/关于python的迭代器和生成器/">关于python的迭代器和生成器</a>
-    </h1>
-  
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8yOTQ4MS82MDQ5">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
 
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/2019/09/09/关于python的迭代器和生成器/" class="article-date">
-	  <time datetime="2019-09-09T09:34:04.000Z" itemprop="datePublished">September 9, 2019</time>
-	</a>
+		       if (typeof LivereTower === 'function') { return; }
 
-       
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
 
-          
-          <div class="entry-summary">
-          一 、python中的容器、可迭代对象、迭代器的使用–
-&emsp;容器: python中一切皆对象， 对象的抽象就是类， 而对象的集就是容器，所以列表， 元祖，字典等都是容器，并且所有的融洽都是可以迭代的(iterable)&emsp; 迭代器: 迭代器(iterator)提供了next的方法， 调用这个方法会得到迭代器的下一个对象，直到取完抛出StopIteration错误类型，所以可以通过可迭代对象调取next方法完成遍历迭代器。可以通过isinstance校验是否为可迭代对象isinstanstance(obj, lterable)
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
 
-        
-          <p class="article-more-link">
-            <a href="/2019/09/09/关于python的迭代器和生成器/#more">Continue Reading →</a>
-          </p>
-        </div>
-      
-    </div>
-    <footer class="entry-meta entry-footer">
-      
-      
-  <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li></ul>
+
 
       
     </footer>
     <hr class="entry-footer-hr">
   </div>
   
-</article>
-
-<!-- Table of Contents -->
-
-  
-    <article id="post-mysql双机热备实现"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
     
-    
-      <header class="article-header">
-        
+<nav id="article-nav">
   
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2019/06/11/mysql双机热备实现/">mysql双机热备实现</a>
-    </h1>
   
+    <a href="/2019/09/09/关于python的迭代器和生成器/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">关于python的迭代器和生成器</div>
+    </a>
+  
+</nav>
 
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/2019/06/11/mysql双机热备实现/" class="article-date">
-	  <time datetime="2019-06-11T03:16:37.000Z" itemprop="datePublished">June 11, 2019</time>
-	</a>
-
-       
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-
-          
-          <div class="entry-summary">
-          在项目部署上线的时候，除了bug的修复最重要的还是数据的安全，为了防止一些特殊情况的发生，我们会采用一些容灾备份的方案，在正常运行的情况下也需要对数据库进行备份， 相对于冷备份，热备份和热拷贝实时性是比较高的。有时候为了提供数据库的性能也会读写分离，实际方案也有很多种，比如master-slave备份机制， master-master 备份机制等等。
-
-        
-          <p class="article-more-link">
-            <a href="/2019/06/11/mysql双机热备实现/#more">Continue Reading →</a>
-          </p>
-        </div>
-      
-    </div>
-    <footer class="entry-meta entry-footer">
-      
-      
-  <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/">mysql</a></li></ul>
-
-      
-    </footer>
-    <hr class="entry-footer-hr">
-  </div>
   
 </article>
 
 <!-- Table of Contents -->
 
-  
-    <article id="post-2019-6-5阶段总结"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
     
+      <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一-从线程开始讲起"><span class="nav-number">1.</span> <span class="nav-text">一. 从线程开始讲起</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、再来讲讲进程"><span class="nav-number">2.</span> <span class="nav-text">二、再来讲讲进程</span></a></li></ol>
     
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2019/06/05/2019-6-5阶段总结/">2019-6-5阶段总结</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/2019/06/05/2019-6-5阶段总结/" class="article-date">
-	  <time datetime="2019-06-05T02:02:39.000Z" itemprop="datePublished">June 5, 2019</time>
-	</a>
-
-       
-      
     </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-
-          
-          <div class="entry-summary">
-          现在我更加坚信在生活的道路上并没有多少捷径， 所以呢革命仍未成功，同志仍需努力，仔细算下来，其实自己弹吉他的时间已经寥寥无几了，这是不是走向成熟的标志之一呢，哈哈？
-
-        
-          <p class="article-more-link">
-            <a href="/2019/06/05/2019-6-5阶段总结/#more">Continue Reading →</a>
-          </p>
-        </div>
-      
-    </div>
-    <footer class="entry-meta entry-footer">
-      
-      
-  <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/随记/">随记</a></li></ul>
-
-      
-    </footer>
-    <hr class="entry-footer-hr">
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-  
-    <article id="post-Josephus问题多重解"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2019/05/30/Josephus问题多重解/">Josephus问题多重解</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/2019/05/30/Josephus问题多重解/" class="article-date">
-	  <time datetime="2019-05-30T03:10:32.000Z" itemprop="datePublished">May 30, 2019</time>
-	</a>
-
-       
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-
-          
-          <div class="entry-summary">
-          问题描述:Josephubs(约瑟夫环)：假设有n个人围坐一圈， 现在要求从k个人开始报数， 报到第m个数的人退出。然后从下一个人开始继续报数并按同样规则退出，直到所有人退出。要求按顺序输出各出列人的编号
-
-        
-          <p class="article-more-link">
-            <a href="/2019/05/30/Josephus问题多重解/#more">Continue Reading →</a>
-          </p>
-        </div>
-      
-    </div>
-    <footer class="entry-meta entry-footer">
-      
-      
-  <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/algorithm/">-algorithm</a></li></ul>
-
-      
-    </footer>
-    <hr class="entry-footer-hr">
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-  
-    <article id="post-关于顺序表的理解"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2019/05/23/关于顺序表的理解/">关于顺序表的理解</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/2019/05/23/关于顺序表的理解/" class="article-date">
-	  <time datetime="2019-05-23T09:20:17.000Z" itemprop="datePublished">May 23, 2019</time>
-	</a>
-
-       
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-
-          
-          <div class="entry-summary">
-          关于顺序表的理解
-在数据结构中大致分为线性结构和非线性结构，其中我们常用的线性表、队列、栈都是属于线性结构的一种，另外还有图和树是属于非线性结构。线性表又可以分为顺序表和链表，在逻辑结构上顺序表和链表都是一对一关联的线性结构，而顺序表和链表的区别就是顺序表在存储时物理地址是连续性的， 在python中可以用id()查看,而链表在内存中不连续存储，通过元素的前驱和后继来建立元素之间的关系，这样就避免了连续内存块不够用的情况。
-
-
-        
-          <p class="article-more-link">
-            <a href="/2019/05/23/关于顺序表的理解/#more">Continue Reading →</a>
-          </p>
-        </div>
-      
-    </div>
-    <footer class="entry-meta entry-footer">
-      
-      
-  <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DS/">DS</a></li></ul>
-
-      
-    </footer>
-    <hr class="entry-footer-hr">
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-  
-    <article id="post-python-rabbitmq-实例"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2019/04/29/python-rabbitmq-实例/">python_rabbitmq_实例</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/2019/04/29/python-rabbitmq-实例/" class="article-date">
-	  <time datetime="2019-04-29T08:21:56.000Z" itemprop="datePublished">April 29, 2019</time>
-	</a>
-
-       
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-
-          
-          <div class="entry-summary">
-          
-解耦：在项目启动之初是很难预测未来会遇到什么困难的，消息中间件在处理过程中插入了一个隐含的，基于数据的接口层，两边都实现这个接口，这样就允许独立的修改或者扩展两边的处理过程，只要两边遵守相同的接口约束即可。
-冗余（存储）：在某些情况下处理数据的过程中会失败，消息中间件允许把数据持久化知道他们完全被处理
-扩展性：消息中间件解耦了应用的过程，所以提供消息入队和处理的效率是很容易的，只需要增加处理流程就可以了。
-削峰：在访问量剧增的情况下，但是应用仍然需要发挥作用，但是这样的突发流量并不常见。而使用消息中间件采用队列的形式可以减少突发访问压力，不会因为突发的超时负荷要求而崩溃
-可恢复性：当系统一部分组件失效时，不会影响到整个系统。消息中间件降低了进程间的耦合性，当一个处理消息的进程挂掉后，加入消息中间件的消息仍然可以在系统恢复后重新处理
-顺序保证：在大多数场景下，处理数据的顺序也很重要，大部分消息中间件支持一定的顺序性
-缓冲：消息中间件通过一个缓冲层来帮助任务最高效率的执行
-异步通信：通过把把消息发送给消息中间件，消息中间件并不立即处理它，后续在慢慢处理。
-
-        
-          <p class="article-more-link">
-            <a href="/2019/04/29/python-rabbitmq-实例/#more">Continue Reading →</a>
-          </p>
-        </div>
-      
-    </div>
-    <footer class="entry-meta entry-footer">
-      
-      
-  <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/rabbitmq/">rabbitmq</a></li></ul>
-
-      
-    </footer>
-    <hr class="entry-footer-hr">
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-  
-    <article id="post-实用的文档"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2019/04/12/实用的文档/">实用的文档</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/2019/04/12/实用的文档/" class="article-date">
-	  <time datetime="2019-04-12T08:21:32.000Z" itemprop="datePublished">April 12, 2019</time>
-	</a>
-
-       
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-
-          
-          <div class="entry-summary">
-          知识方案性文档
-
-        
-          <p class="article-more-link">
-            <a href="/2019/04/12/实用的文档/#more">Continue Reading →</a>
-          </p>
-        </div>
-      
-    </div>
-    <footer class="entry-meta entry-footer">
-      
-      
-  <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/doc/">doc</a></li></ul>
-
-      
-    </footer>
-    <hr class="entry-footer-hr">
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-  
-    <article id="post-python-redis-操作"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2019/03/11/python-redis-操作/">python redis 操作</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/2019/03/11/python-redis-操作/" class="article-date">
-	  <time datetime="2019-03-11T02:32:37.000Z" itemprop="datePublished">March 11, 2019</time>
-	</a>
-
-       
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-
-          
-          <div class="entry-summary">
-          python 关于redis的常见操作
-
-        
-          <p class="article-more-link">
-            <a href="/2019/03/11/python-redis-操作/#more">Continue Reading →</a>
-          </p>
-        </div>
-      
-    </div>
-    <footer class="entry-meta entry-footer">
-      
-      
-  <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/reids/">reids</a></li></ul>
-
-      
-    </footer>
-    <hr class="entry-footer-hr">
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-  
-    <article id="post-python语言特性"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2019/02/12/python语言特性/">python语言特性</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/2019/02/12/python语言特性/" class="article-date">
-	  <time datetime="2019-02-12T02:02:16.000Z" itemprop="datePublished">February 12, 2019</time>
-	</a>
-
-       
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-
-          
-          <div class="entry-summary">
-          
-工作久了对之前的基础语法做一个整理，以便自己更了解python的语法， 在编码的时候可以更加更加得心应手。
-
-
-        
-          <p class="article-more-link">
-            <a href="/2019/02/12/python语言特性/#more">Continue Reading →</a>
-          </p>
-        </div>
-      
-    </div>
-    <footer class="entry-meta entry-footer">
-      
-      
-  <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li></ul>
-
-      
-    </footer>
-    <hr class="entry-footer-hr">
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-  
-
-
-  <nav id="page-nav">
-    
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next</a>
-  </nav>
-
+  </aside>
 </section>
-          <aside id="sidebar">
-  
-    <div style="margin: 20px 0;">
-	<div id="search-form-wrap">
-
-    <form class="search-form">
-        <label style="width: 72%;">
-            <span class="screen-reader-text">Search for:</span>
-            <input type="search" class="search-field" style="height: 36px; width: 100%;" placeholder=" Search…" value="" name="s" title="Search for:">
-        </label>
-        <input type="submit" class="search-form-submit" value="Search">
-    </form>
-    <div class="ins-search">
-    <div class="ins-search-mask"></div>
-    <div class="ins-search-container">
-        <div class="ins-input-wrapper">
-            <input type="text" class="ins-search-input" placeholder="Type something..."/>
-            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
-        </div>
-        <div class="ins-section-wrapper">
-            <div class="ins-section-container"></div>
-        </div>
-    </div>
-</div>
-<script>
-(function (window) {
-    var INSIGHT_CONFIG = {
-        TRANSLATION: {
-            POSTS: 'Posts',
-            PAGES: 'Pages',
-            CATEGORIES: 'Categories',
-            TAGS: 'Tags',
-            UNTITLED: '(Untitled)',
-        },
-        ROOT_URL: '/',
-        CONTENT_URL: '/content.json',
-    };
-    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-})(window);
-</script>
-<script src="/js/insight.js"></script>
-
-</div>
-</div>
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Connect With Us</h3>
-    <div class="widget widget_athemes_social_icons">
-
-    	<ul class="clearfix widget-social-icons">   
-    	
-   			<li><a href="https://github.com/Jayzhanscar" title="Github"><i class="fa fa-github" aria-hidden="true"></i></a></li> 
-
-   		
-   			<li><a href="http://weibo.com/Jayzhanscar" title="Weibo"><i class="fa fa-weibo" aria-hidden="true"></i></a></li> 
-
-   		
-   		</ul>
-
-
-   		<!--
-   		<ul class="clearfix widget-social-icons">   		
-   		<li class="widget-si-twitter"><a href="http://twitter.com" title="Twitter"><i class="ico-twitter"></i></a></li> 
-		<li class="widget-si-facebook"><a href="http://facebook.com" title="Facebook"><i class="ico-facebook"></i></a></li>
-			<li class="widget-si-gplus"><a href="http://plus.google.com" title="Google+"><i class="ico-gplus"></i></a></li>
-			<li class="widget-si-pinterest"><a href="http://pinterest.com" title="Pinterest"><i class="ico-pinterest"></i></a></li>
-			<li class="widget-si-flickr"><a href="http://flickr.com" title="Flickr"><i class="ico-flickr"></i></a></li>
-			<li class="widget-si-instagram"><a href="http://instagram.com" title="Instagram"><i class="ico-instagram"></i></a></li>
-		</ul> -->
-
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget_athemes_tabs">
-    <ul id="widget-tab" class="clearfix widget-tab-nav">
-      <li class="active"><a>Recent Posts</a></li>
-    </ul>
-    <div class="widget">
-      <ul>
-        
-          <li class="clearfix">
-
-            
-              <div class="widget-entry-summary" style="margin: 0;">
-            
-
-              <h6 style="margin: 0;"><a href="/2019/09/26/python-进程、线程、协程分析/">python 进程、线程、协程分析----- 线程篇</a></h6>
-              <span>September 26, 2019</span>
-            </div>
-
-          </li>
-        
-          <li class="clearfix">
-
-            
-              <div class="widget-entry-summary" style="margin: 0;">
-            
-
-              <h6 style="margin: 0;"><a href="/2019/09/09/关于python的迭代器和生成器/">关于python的迭代器和生成器</a></h6>
-              <span>September 9, 2019</span>
-            </div>
-
-          </li>
-        
-          <li class="clearfix">
-
-            
-              <div class="widget-entry-summary" style="margin: 0;">
-            
-
-              <h6 style="margin: 0;"><a href="/2019/06/11/mysql双机热备实现/">mysql双机热备实现</a></h6>
-              <span>June 11, 2019</span>
-            </div>
-
-          </li>
-        
-          <li class="clearfix">
-
-            
-              <div class="widget-entry-summary" style="margin: 0;">
-            
-
-              <h6 style="margin: 0;"><a href="/2019/06/05/2019-6-5阶段总结/">2019-6-5阶段总结</a></h6>
-              <span>June 5, 2019</span>
-            </div>
-
-          </li>
-        
-          <li class="clearfix">
-
-            
-              <div class="widget-entry-summary" style="margin: 0;">
-            
-
-              <h6 style="margin: 0;"><a href="/2019/05/30/Josephus问题多重解/">Josephus问题多重解</a></h6>
-              <span>May 30, 2019</span>
-            </div>
-
-          </li>
-        
-          <li class="clearfix">
-
-            
-              <div class="widget-entry-summary" style="margin: 0;">
-            
-
-              <h6 style="margin: 0;"><a href="/2019/05/23/关于顺序表的理解/">关于顺序表的理解</a></h6>
-              <span>May 23, 2019</span>
-            </div>
-
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Categories</h3>
-    <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/随记/">随记</a><span class="category-list-count">1</span></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithm/">-algorithm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DS/">DS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/django-celery/">django-celery</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/doc/">doc</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/feelings/">feelings</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rabbitmq/">rabbitmq</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reids/">reids</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/随记/">随记</a><span class="tag-list-count">1</span></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/algorithm/" style="font-size: 10px;">-algorithm</a> <a href="/tags/DS/" style="font-size: 10px;">DS</a> <a href="/tags/django-celery/" style="font-size: 10px;">django-celery</a> <a href="/tags/doc/" style="font-size: 10px;">doc</a> <a href="/tags/feelings/" style="font-size: 10px;">feelings</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/rabbitmq/" style="font-size: 10px;">rabbitmq</a> <a href="/tags/reids/" style="font-size: 10px;">reids</a> <a href="/tags/随记/" style="font-size: 10px;">随记</a>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a><span class="archive-list-count">3</span></li></ul>
-    </div>
-  </div>
-
-
-  
-</aside>
         
       </div>
 
