@@ -11,13 +11,13 @@
   
   
   
-  <meta name="description" content="python作为动态脚本解释性语言，在编译速度上面一直是被诟病的地方，很多时候在群里面大家对于python的性能都有着很多的质疑， 其实通过一些优化还是可以让py程序变得很高效。  一. 从线程开始讲起 ####介绍   &amp;emsp;&amp;emsp;在python中如果说起多线程肯定是会被认为是伪多线程，因为python在1989年圣诞节诞生的时候计算机硬件并没有那么发达，计算机也都是单核存在，所以">
+  <meta name="description" content="python作为动态脚本解释性语言，在编译速度上面一直是被诟病的地方，很多时候在群里面大家对于python的性能都有着很多的质疑， 其实通过一些优化还是可以让py程序变得很高效。">
 <meta name="keywords" content="python">
 <meta property="og:type" content="article">
 <meta property="og:title" content="python 进程、线程、协程分析----- 线程篇">
 <meta property="og:url" content="https://blog.jayzhan.cn/2019/09/26/python-进程、线程、协程分析/index.html">
 <meta property="og:site_name" content="詹灵杰博客">
-<meta property="og:description" content="python作为动态脚本解释性语言，在编译速度上面一直是被诟病的地方，很多时候在群里面大家对于python的性能都有着很多的质疑， 其实通过一些优化还是可以让py程序变得很高效。  一. 从线程开始讲起 ####介绍   &amp;emsp;&amp;emsp;在python中如果说起多线程肯定是会被认为是伪多线程，因为python在1989年圣诞节诞生的时候计算机硬件并没有那么发达，计算机也都是单核存在，所以">
+<meta property="og:description" content="python作为动态脚本解释性语言，在编译速度上面一直是被诟病的地方，很多时候在群里面大家对于python的性能都有着很多的质疑， 其实通过一些优化还是可以让py程序变得很高效。">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://blog.jayzhan.cn/2019/09/26/python-进程、线程、协程分析/code2.png">
 <meta property="og:image" content="https://blog.jayzhan.cn/2019/09/26/python-进程、线程、协程分析/code3.png">
@@ -25,10 +25,10 @@
 <meta property="og:image" content="https://blog.jayzhan.cn/2019/09/26/python-进程、线程、协程分析/code5.png">
 <meta property="og:image" content="https://blog.jayzhan.cn/2019/09/26/python-进程、线程、协程分析/code6.png">
 <meta property="og:image" content="https://blog.jayzhan.cn/2019/09/26/python-进程、线程、协程分析/code7.png">
-<meta property="og:updated_time" content="2019-10-02T17:30:21.399Z">
+<meta property="og:updated_time" content="2019-10-02T17:34:13.121Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="python 进程、线程、协程分析----- 线程篇">
-<meta name="twitter:description" content="python作为动态脚本解释性语言，在编译速度上面一直是被诟病的地方，很多时候在群里面大家对于python的性能都有着很多的质疑， 其实通过一些优化还是可以让py程序变得很高效。  一. 从线程开始讲起 ####介绍   &amp;emsp;&amp;emsp;在python中如果说起多线程肯定是会被认为是伪多线程，因为python在1989年圣诞节诞生的时候计算机硬件并没有那么发达，计算机也都是单核存在，所以">
+<meta name="twitter:description" content="python作为动态脚本解释性语言，在编译速度上面一直是被诟病的地方，很多时候在群里面大家对于python的性能都有着很多的质疑， 其实通过一些优化还是可以让py程序变得很高效。">
 <meta name="twitter:image" content="https://blog.jayzhan.cn/2019/09/26/python-进程、线程、协程分析/code2.png">
   
     <link rel="alternate" href="/atom.xml" title="詹灵杰博客" type="application/atom+xml">
@@ -148,6 +148,7 @@
         <blockquote>
 <p>python作为动态脚本解释性语言，在编译速度上面一直是被诟病的地方，很多时候在群里面大家对于python的性能都有着很多的质疑， 其实通过一些优化还是可以让py程序变得很高效。</p>
 </blockquote>
+<a id="more"></a>
 <h3 id="一-从线程开始讲起"><a href="#一-从线程开始讲起" class="headerlink" title="一. 从线程开始讲起"></a>一. 从线程开始讲起</h3><ol>
 <li><p>####<strong>介绍</strong></p>
 <p>  &emsp;&emsp;在python中如果说起多线程肯定是会被认为是伪多线程，因为python在1989年圣诞节诞生的时候计算机硬件并没有那么发达，计算机也都是单核存在，所以自然而然都是以单线程去运行程序， 等到多核的出现，python开始支持多线程了， 那么解决多线程之间的数据完整性和状态同步最简单的方法就是<strong><font color="#ec7259">加锁</font></strong>, 所以GIL(Global Interperter Lock， 全局解释器锁)出现了,顾名思义它并不是在python语言特性上的东西， 而是在<strong><font color="#ec7259">python解释器上</font></strong>, GIL给线程加锁， 在同一个进程中，同一时间只允许一个线程运行，当线程切换的时候同时释放又重新加锁，这么一想反而多线程变得更加的麻烦，那么python的多线程真的是鸡肋吗？</p>

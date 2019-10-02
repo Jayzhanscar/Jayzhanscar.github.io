@@ -133,172 +133,19 @@
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <blockquote>
-<p>python作为动态脚本解释性语言，在编译速度上面一直是被诟病的地方，很多时候在群里面大家对于python的性能都有着很多的质疑， 其实通过一些优化还是可以让py程序变得很高效。</p>
-</blockquote>
-<h3 id="一-从线程开始讲起"><a href="#一-从线程开始讲起" class="headerlink" title="一. 从线程开始讲起"></a>一. 从线程开始讲起</h3><ol>
-<li><p>####<strong>介绍</strong></p>
-<p>  &emsp;&emsp;在python中如果说起多线程肯定是会被认为是伪多线程，因为python在1989年圣诞节诞生的时候计算机硬件并没有那么发达，计算机也都是单核存在，所以自然而然都是以单线程去运行程序， 等到多核的出现，python开始支持多线程了， 那么解决多线程之间的数据完整性和状态同步最简单的方法就是<strong><font color="#ec7259">加锁</font></strong>, 所以GIL(Global Interperter Lock， 全局解释器锁)出现了,顾名思义它并不是在python语言特性上的东西， 而是在<strong><font color="#ec7259">python解释器上</font></strong>, GIL给线程加锁， 在同一个进程中，同一时间只允许一个线程运行，当线程切换的时候同时释放又重新加锁，这么一想反而多线程变得更加的麻烦，那么python的多线程真的是鸡肋吗？</p>
-</li>
-</ol>
-<hr>
-<ol start="2">
-<li><p>####实际分析</p>
-<ul>
-<li><p><strong><font color="#6CA6CD">常用方法</font></strong></p>
-<pre><code>1. 在python中**&lt;font color=&apos;bule&apos;&gt;threading&lt;/font&gt;**库可以用来实现线程， 请看下面的🌰:
+        
 
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">countdown</span><span class="params">(n)</span>:</span></span><br><span class="line">	<span class="keyword">while</span> n &gt; <span class="number">0</span>:</span><br><span class="line">	print(<span class="string">'T-mins'</span>, n)</span><br><span class="line">	n -= <span class="number">1</span></span><br><span class="line">	time.sleep(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> threading <span class="keyword">import</span> Thread</span><br><span class="line">t = Thread(target= countdown, args=(<span class="number">10</span>, )) <span class="comment"># 此时创建了一个线程实例对象t</span></span><br><span class="line">t.start() <span class="comment"># 调用start()方法线程才开始被执行</span></span><br><span class="line"></span><br><span class="line">t.is_alive()  <span class="comment"># 查看该线程是否属于活跃状态</span></span><br><span class="line"></span><br><span class="line">t.join()  <span class="comment"># join()执行会等待该线程结束</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">th = Thread(target= countdown, args=(<span class="number">10</span>, ), daemon=<span class="keyword">True</span>) <span class="comment"># 守护线程</span></span><br></pre></td></tr></table></figure>
-</code></pre></li>
-</ul>
-</li>
-</ol>
-<pre><code>     * &amp;emsp;&amp;emsp;上述例子中线程实例会在它们自己所属的**系统级线程**（即,POSIX 线程或者Windows线程）中执行， 这些线程完全由操作系统来管理，一旦被启动后线程就开始**独立**运行，直到目标函数返回。当设置为守护线程时,该线程是无法被连接的，但是当主线程结束后他们就会自动销毁掉.
-     * &amp;emsp;&amp;emsp;以上就是标准库提供给我们的一些常用的方法，其余的一些操作比如说，**终止进程**、**给线程发信号**、**调整线程调度属性**以及执行其他的高级操作都还没有，需要自己去构建,比如想要终止线程，这个线程就必须要在某个时间点轮询退出状态，那么可以将线程放到下面这样的类中:
-
-     <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CountdownTask</span><span class="params">(object)</span>:</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">		self._running = <span class="keyword">True</span></span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">terminate</span><span class="params">(self)</span>:</span></span><br><span class="line">		self._running = <span class="keyword">False</span></span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self, n)</span>:</span></span><br><span class="line">		<span class="keyword">while</span> self._running <span class="keyword">and</span> n &gt; <span class="number">0</span>:</span><br><span class="line">			print(<span class="string">'T-minus'</span>, n)</span><br><span class="line">			n -= <span class="number">1</span></span><br><span class="line">			time.sleep(<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line">c = CountdownTask()</span><br><span class="line">t = Thread(target=c.run, args=(<span class="number">10</span>, ))</span><br><span class="line">t.start()</span><br><span class="line"></span><br><span class="line">c.terminate()</span><br><span class="line">t.join()</span><br></pre></td></tr></table></figure>
-
-     &amp;emsp;&amp;emsp;对于上面的例子其实适用于CPU密集型的， 并不会有太多的阻塞性操作，但是如果是一些I/O操作的操作实现同步就会变得很棘手，如果一个任务一直被阻塞，那对于其他线程来讲并不能及时终止，所以需要小心的为线程加上**&lt;font color=&apos;bule&apos;&gt;超时循环&lt;/font&gt;**, 例如下面一段代码:
-
-     <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">IOTask</span><span class="params">(object)</span>:</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">terminate</span><span class="params">(self)</span>:</span></span><br><span class="line">		self._running = <span class="keyword">False</span></span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self, sock)</span>:</span></span><br><span class="line">		<span class="comment"># sock is a socket</span></span><br><span class="line">		sock.settimeout(<span class="number">5</span>)</span><br><span class="line">		<span class="keyword">while</span> self._running:</span><br><span class="line">			<span class="keyword">try</span>:</span><br><span class="line">				data = sock.recv(<span class="number">8192</span>)</span><br><span class="line">				<span class="keyword">break</span></span><br><span class="line">			<span class="keyword">except</span> socket.timout:</span><br><span class="line">				<span class="keyword">continue</span> </span><br><span class="line">		</span><br><span class="line">		<span class="keyword">return</span></span><br></pre></td></tr></table></figure>
+          
+          <div class="entry-summary">
+          
+python作为动态脚本解释性语言，在编译速度上面一直是被诟病的地方，很多时候在群里面大家对于python的性能都有着很多的质疑， 其实通过一些优化还是可以让py程序变得很高效。
 
 
- * **&lt;font color=&apos;#6CA6CD&apos;&gt;判断线程是否启动和线程间同步问题&lt;/font&gt;**
-
-     **问题**: 当创建一个线程的时候，但是想知道它实际是在什么时候运行的，首先我们来看线程的核心特征是&lt;font color=&apos;bule&apos;&gt;能够以非确定性的方式（即 何时开始执行、何时被打断、何时恢复执行完全由操作系统调度管理）独立运行的&lt;/font&gt;
-
-     **解决方案**: 我们可以用threading库中的&lt;font color=&apos;bule&apos;&gt;Event&lt;/font&gt;对象， 它允许线程等待某个时间发生。 初始状态时事件被设置为0， 如果事件没有被设置而线程正在等待该事件， 那么线程就会被阻塞， 这话听起来有点绕口，就是如果被标记的线程没有设置，之后等待的所有线程都会一直等待。具体示例请看下面代码
-
-     <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> threading <span class="keyword">import</span> Thread, Event</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">countdown</span><span class="params">(n, start_evt)</span>:</span></span><br><span class="line">	print(<span class="string">'starting'</span>) </span><br><span class="line">	start_evt.set() <span class="comment"># 设置</span></span><br><span class="line">	<span class="keyword">while</span> n &gt; <span class="number">0</span>:</span><br><span class="line">		print(<span class="string">'T-minus'</span>, n)</span><br><span class="line">		n -= <span class="number">1</span></span><br><span class="line">		time.sleep(<span class="number">5</span>)</span><br><span class="line">		</span><br><span class="line">start_evt = Event()</span><br><span class="line">t = Thread(ttarget=countdown, args=(<span class="number">10</span>, start_evt))</span><br><span class="line">t.start()</span><br><span class="line"></span><br><span class="line">started_evt.wait()  <span class="comment"># 等待 </span></span><br><span class="line">print(<span class="string">'running'</span>) <span class="comment"># running 总于  starting 后打印</span></span><br></pre></td></tr></table></figure>
-
-     &amp;emsp;&amp;emsp;注: Event最好只用于**一次性的事件**， 也就是我们创建一个事件， 让线程等待事件被设置， 然后一旦完成设置了Event对象就被丢弃, 尽管可以使用**clear()**方法来清除事件， 但是要安全地清除事件并等待它被再次设置这个过程很难同步协调，可能会造成事件丢失、死锁或者其他的问题，比如我们无法保证事件再次发起的时候是否被清除如果需要反复通知某个事件， 那最好使用**Condition**对象来处理， 比如实现一个定时器， 每次超时的时候其他线程可以感知到超时时间, 代码如下
-
-     <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PeriodicTimer</span><span class="params">(object)</span>:</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, interval)</span>:</span></span><br><span class="line">		self._interval = interval</span><br><span class="line">		self._flag = <span class="number">0</span></span><br><span class="line">		self._cv = threading.Condition()</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">start</span><span class="params">(self)</span>:</span></span><br><span class="line">		t = threading.Thread(target=self.run)</span><br><span class="line">		t.daemon = <span class="keyword">True</span></span><br><span class="line">		t.start()</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></span><br><span class="line">		<span class="string">'''</span></span><br><span class="line"><span class="string">		启动定时器并且通知其他等待线程</span></span><br><span class="line"><span class="string">		'''</span></span><br><span class="line">		<span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">			time.sleep(self._interval)</span><br><span class="line">			<span class="keyword">with</span> self._cv:</span><br><span class="line">				self._flag ^= <span class="number">1</span></span><br><span class="line">				self._cv.notify_all()</span><br><span class="line">   	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">wait_for_tick</span><span class="params">(self)</span>:</span></span><br><span class="line">		<span class="string">'''</span></span><br><span class="line"><span class="string">		Wait for the next tick of the timer</span></span><br><span class="line"><span class="string">		'''</span></span><br><span class="line">		<span class="keyword">with</span> self._cv:</span><br><span class="line">			last_flag = self._flag</span><br><span class="line">			<span class="keyword">while</span> last_flag == self._flag:</span><br><span class="line">				self._cv.wait()</span><br><span class="line">	<span class="comment"># 示例 使用定时器</span></span><br><span class="line">	ptimer = PeriodicTimer(<span class="number">5</span>)</span><br><span class="line">	ptimer.start()</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">countdown</span><span class="params">(nticks)</span>:</span></span><br><span class="line">		<span class="keyword">while</span> nticks &gt; <span class="number">0</span>:</span><br><span class="line">			ptimer.wait_for_tick()</span><br><span class="line">			nticks -= <span class="number">1</span></span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">countup</span><span class="params">(last)</span>:</span></span><br><span class="line">		m = <span class="number">0</span></span><br><span class="line">		<span class="keyword">while</span> n &lt; last:</span><br><span class="line">			ptimer.wait_for_tick()</span><br><span class="line">			n += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">threading.Thread(target=countdown, args(<span class="number">10</span>, )).start()</span><br><span class="line">threading.Thread(target=countup, args(<span class="number">10</span>, )).start()</span><br></pre></td></tr></table></figure>
-
- * **&lt;font color=&apos;#6CA6CD&apos;&gt;线程间通信&lt;/font&gt;**
-
-     &amp;emsp;&amp;emsp;1. 要实现线程间通信最安全的做法还是队列，就是使用queue模块中的Queue了，首先先创建一个Queue实例，它会被所有的线程共享，之后就可以使用put()和get()操作来给队列添加或者移除元素，示例如下:
-
-     <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">from queue import Queue</span><br><span class="line">from threading import Thread</span><br><span class="line"></span><br><span class="line">def producer(out_q):</span><br><span class="line">	while True:</span><br><span class="line">		out_q.put(data)</span><br><span class="line"></span><br><span class="line">def consumer(in_q):</span><br><span class="line">	while True:</span><br><span class="line">		data = in_q.get()</span><br><span class="line"></span><br><span class="line">q = Queue(20)  # size=20可以设置队列大小或者不写</span><br><span class="line">t1 = Thread(target= producer, args=(q,))</span><br><span class="line">t2 = Thread(target= consumer, args=(q,))</span><br><span class="line">t1.start()</span><br><span class="line">t2.start()</span><br></pre></td></tr></table></figure>
-
-
-     &amp;emsp;&amp;emsp;Queue实例已经拥有了所有所需的锁， 因此可以在线程间通信，同时也可以在进程间共享，当使用队列时如何对生产者和消费者的关闭过程进行同步协调，需要使用一些技巧使得消费者在一定的条件下退出，示例如下:
-
-     <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">from queue import Queue</span><br><span class="line">from threading import Thread</span><br><span class="line">_sentinel = object()</span><br><span class="line"></span><br><span class="line">def producer(out_q):</span><br><span class="line">	while True:</span><br><span class="line">		out_q.put(data)</span><br><span class="line">	out_q.put(_sentinel)</span><br><span class="line"></span><br><span class="line">def consumer(in_q):</span><br><span class="line">	while True:</span><br><span class="line">		data = in_q.get()</span><br><span class="line">		if data in _sentinel:</span><br><span class="line">			in_q.put(_sentinel)</span><br><span class="line">			break</span><br><span class="line"></span><br><span class="line">q = Queue(20)  # size=20可以设置队列大小或者不写</span><br><span class="line">t1 = Thread(target= producer, args=(q,))</span><br><span class="line">t2 = Thread(target= consumer, args=(q,))</span><br><span class="line">t1.start()</span><br><span class="line">t2.start()</span><br></pre></td></tr></table></figure>
-
-
-  &amp;emsp;&amp;emsp; 当消费者接收到这个特殊的终止符之后会立即将其放回队列中，那么其他监听同一队列的线程也会接收到终止符，因此可以一次关掉线程，尽管队列是线程通信的最常见的机制，但是只要添加了所需要的锁和同步功能， 就可以构建自己的线程安全型的数据结构，最常见的做法就是将数据结构和条件变量打包在一起，用headq实现优先级队列，示例代码如下:
-
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">import headq</span><br><span class="line">import threading</span><br><span class="line"></span><br><span class="line">class PriorityQueue(object):</span><br><span class="line">	</span><br><span class="line">	def __init(self):</span><br><span class="line">		self._queue = []</span><br><span class="line">		self._count = 0</span><br><span class="line">		self._cv = threading.Condition()</span><br><span class="line">	</span><br><span class="line">	def put(self, item, priority):</span><br><span class="line">		with self._cv:</span><br><span class="line">			headq.heappush(self._queue, (-priority, self._count, item))</span><br><span class="line">			self._count += 1</span><br><span class="line">			self._cv.notify()</span><br><span class="line">	</span><br><span class="line">	def get(self):</span><br><span class="line">		with self._cv:</span><br><span class="line">			while len(self._queue) == 0:</span><br><span class="line">				self._cv.wait()</span><br><span class="line">			</span><br><span class="line">			return headq.heappop(self._queue)[-1]</span><br></pre></td></tr></table></figure>
-
-
-
-  但是队列通信是一种&lt;font color=&apos;bule&apos;&gt;单方向且不确定的过程&lt;/font&gt;。一般来说我们无法得知接受线程何时会收到消息开始工作，Queue对象的确提供了一些基本的事件完成功能，可以通过task_done()和join()实现。
-  当消费者已经处理了数据之后生产者需要对此立即感知的话，那么可以将发送的数据和一个Event事件绑定(元祖的形式绑定)，这样就允许生产者可以监视这个过程了， 代示例如下:
-
-  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> queue importt Queue</span><br><span class="line"><span class="keyword">from</span> threading immport Thread, Event</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">porducer</span><span class="params">(out_q)</span>:</span></span><br><span class="line">	<span class="keyword">while</span> running:</span><br><span class="line">		evt = Event()</span><br><span class="line">		out_q.put((data, evt))</span><br><span class="line">		evt.wait()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">consumer</span><span class="params">(in_q)</span>:</span></span><br><span class="line">	<span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">		data, evt = in_q.get() <span class="comment"># 拆包</span></span><br><span class="line">		evt.set()</span><br></pre></td></tr></table></figure>
-
-  用队列机制实现多线程可以避免很多锁机制以及底层同步原理了，而且队列进行通信易于拓展，在不同线程中要传递对象引用的话如果需要关心共享状态，那么只传递不可变类型的数据时可以对队列进行**&lt;font color=&apos;bule&apos;&gt;深拷贝&lt;/font&gt;**。代码示例:
-
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">from queue import Queue</span><br><span class="line">from threading import Thread</span><br><span class="line">import copy</span><br><span class="line"></span><br><span class="line">def producer(out_q):</span><br><span class="line">	while True:</span><br><span class="line">		out_q.out(copy.deepcopy(data))</span><br><span class="line"></span><br><span class="line">def consumer(in_q):</span><br><span class="line">	while True:</span><br><span class="line">		data = in_q.get()</span><br><span class="line">		</span><br><span class="line">``` </span><br><span class="line">此外在队列中还有很多内置方法，比如empty(), full(), size().</span><br><span class="line"></span><br><span class="line"> 		</span><br><span class="line">* **&lt;font color=&apos;#6CA6CD&apos;&gt;下面我们来看一下python的多线程的性能， 请看下面一段代码&lt;/font&gt;**</span><br><span class="line"></span><br><span class="line">	注：创建mutex互斥锁防止资源竞争</span><br><span class="line"> </span><br><span class="line">	![示例1](python-进程、线程、协程分析/code1.png)</span><br></pre></td></tr></table></figure>
-
-  [output]:  多线程消耗的时间: 6s
-  [output]:  单线程消耗的时间: 1s
-
-  ```
-
-**结果发现在进行cpu运算的时候反而是单线程的耗时较短，好像确实多线程起到了适得其反的作用**
-</code></pre><ul>
-<li><p><strong><font color="#6CA6CD">请再看一段代码</font></strong></p>
-<pre><code>注：同样我创建了task4、5、6用于完成对百度首页的100次请求
-</code></pre><p>  <img src="//blog.jayzhan.cn/2019/09/26/python-进程、线程、协程分析/code2.png" alt="code1"><br>  <img src="//blog.jayzhan.cn/2019/09/26/python-进程、线程、协程分析/code3.png" alt="code1"><br>  <img src="//blog.jayzhan.cn/2019/09/26/python-进程、线程、协程分析/code4.png" alt="code1"></p>
-<p>  <strong>我们发现多线程确实是比单线程快了很多，这样看来在网络请求当中python的多线程还是有用的</strong></p>
-<ol start="3">
-<li><p>####分析:</p>
-<p>&emsp;&emsp;那为什么会出现俩种不一样的结果呢？对！ 使用类型不一样， 前者是cpu密集型的后者为io密集型，第一段出现的原因是cpu的运算速度比python线程切换的时间还快， 第二段网络请求速度和线程切换速度比前者是耗时比较长的，所以多线程还是起到了作用，针对于现在的网络应用场景，基本上是为io密集型， 如果碰到一些大数据运算， 那么python还有很多办法， 比如引用第三方库 <font color="ec7259"> numpy</font>，况且在现在多核cpu的优势下， 完全可以用多进程来解决这个问题，通常情况让进程数和核数相同即可。</p>
-</li>
-<li><p>####实际场景</p>
-<ul>
-<li><p>&emsp;&emsp;虽然pyhton弱化了类的引用， 但是实际运用的过程中面向对象编程的思想还是很实用的, 所以在创建线程可以这样，可以继承Thread类。<br><img src="//blog.jayzhan.cn/2019/09/26/python-进程、线程、协程分析/code5.png" alt="code1"></p>
-</li>
-<li><p>&emsp;&emsp;刚才介绍了一些python的多线程适用于IO密集型的操作， 但是是不是用的越多效率越高呢？会不会出现什么问题呢? 刚才在<br>请看下面示例<br><img src="//blog.jayzhan.cn/2019/09/26/python-进程、线程、协程分析/code6.png" alt="code1"></p>
-</li>
-</ul>
-</li>
-</ol>
-</li>
-</ul>
-<pre><code>&amp;emsp;&amp;emsp; 我创建了task1、task2分别用两个线程去运行， 结果会出现什么呢？实际发现运行代码之后一直    属于阻塞状态，我们把这种状态叫做**&lt;font color=&apos;ec7259&apos;&gt;死锁&lt;/font&gt;**。举个实际场景中的例子，多线程爬虫我们启用线程A去抓取网页内容，线程B做页面解析,线程C做文件保存处理，这个时候资源不得不共享。那么有没有实际解决的方法呢?
-</code></pre><ol start="5">
-<li><p>####死锁的解决方案</p>
-<ul>
-<li><p>死锁解决方案</p>
-<ul>
-<li><ol>
-<li>添加超时时间</li>
-</ol>
-</li>
-<li><ol start="2">
-<li>设置加锁机制:给每个锁分配唯一id，按照升序规则使用多个锁</li>
-</ol>
-</li>
-<li><ol start="3">
-<li>可重入锁 RLock</li>
-</ol>
-</li>
-<li><ol start="3">
-<li>银行家算法</li>
-</ol>
-<p>5.1 添加超时时间: 在加锁的时候mutex.acquire(timeout=10)即可</p>
-<p>5.2  分配id并且按照升序可以使用上下文管理器实现，代码实例如下<br><img src="//blog.jayzhan.cn/2019/09/26/python-进程、线程、协程分析/code7.png" alt="code1"></p>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<pre><code> 分析:表面上thread-1的先获取锁x，再获取锁y，而thread-2是先获取锁y，再获取x。 但是实际上，acquire函数，已经对x，y两个锁进行了排序。所以thread-1，thread-2都是以同一顺序来获取锁的，是不会造成死锁的。
-
- 5.3 可重入锁: 针对于**同一个线程中**我们可以用 lock = threading.RLock()
-
- 5.4  [银行家算法](https://baike.baidu.com/item/银行家算法/1679781): 当一个进程申请使用资源的时候，银行家算法通过先 试探 分配给该进程资源，然后通过安全性算法判断分配后的系统是否处于安全状态，若不安全则试探分配作废，让该进程继续等待。
-  ![code1](python-进程、线程、协程分析/code8.png)
-
-  &amp;emsp;&amp;emsp;分析:首先是银行家算法中的进程：
-    包含进程Pi的需求资源数量（也是最大需求资源数量，MAX）
-    已分配给该进程的资源A（Allocation）
-    还需要的资源数量N（Need=M-A）
-Available为空闲资源数量，即资源池（注意：资源池的剩余资源数量+已分配给所有进程的资源数量=系统中的资源总量）
-假设资源P1申请资源，银行家算法先试探的分配给它 （当然先要看看当前资源池中的资源数量够不够），若申请的资源数量小于等于Available，然后接着判断分配给P1后剩余的资源，能不能使进程队列的某个进程执行完毕，若没有进程可执行完毕，则系统处于不安全状态（即此时没有一个进程能够完成并释放资源，随时间推移，系统终将处于死锁状态）。
-若有进程可执行完毕，则假设回收已分配给它的资源（剩余资源数量增加），把这个进程标记为可完成，并继续判断队列中的其它进程，若所有进程都可执行完毕，则系统处于安全状态，并根据可完成进程的分配顺序生成安全序列（如{P0，P3，P2，P1}表示将申请后的剩余资源Work先分配给P0–&gt;回收（Work+已分配给P0的A0=Work）–&gt;分配给P3–&gt;回收（Work+A3=Work）–&gt;分配给P2–&gt;······满足所有进程）。
-</code></pre><h3 id="二、再来讲讲进程"><a href="#二、再来讲讲进程" class="headerlink" title="二、再来讲讲进程"></a>二、再来讲讲进程</h3><pre><code>1. ####比较：进程和线程的区别
-     * 线程的组成
-
-        1. 线程ID: 线程标识符
-        2. 当前指令指针（PC）
-        3. 寄存器集合
-        4. 堆栈: 堆栈是两种数据结构
-    * 进程的组成:
-
-        1. 进程控制块
-        2. 程序段
-        3. 数据段
-    * &amp;emsp;&amp;emsp;其实两者都可以实现多任务的要求，我们用网易云可以同时下载多首歌曲可以看成是多线程的体现， 网易云和qq音乐之间也可以同时下载音乐，这个就是多进程的体现， 所以进程的程序系统执行的一个实例，并且在一个进程中允许多个线程运行，并且线程只能依赖于进程。线程在创建的时候进程会分配给它堆栈区等一些资源，其中对于进程中一些共享资源也可以使用， 那么各种竞争关系也已经解决，但是多进程在创建的时候会复制父进程的资源和程序段。
-
-2. ####进程的使用实例
- 注： 进程的创建方式和线程大同小异
-![code9](python-进程、线程、协程分析/code9.png)
-
-3. ####进程间通信
-    3.1 &amp;emsp;&amp;emsp; 在线程间通信时可以使用共享资源全局变量的方式去完成， 进程因为资源独立分配所以只能用其他方式， 比如 **&lt;font color=&apos;bule&apos;&gt;socket、队列或者文件读写的形式。&lt;/font&gt;**
-
-    3.2 队列实现
-
-     注：创建的队列以参数的形式传入到进程中, 代码如下
-     ![code9](python-进程、线程、协程分析/code10.jpg) 
-
-### 未完待续
-</code></pre>
+        
+          <p class="article-more-link">
+            <a href="/2019/09/26/python-进程、线程、协程分析/#more">Continue Reading →</a>
+          </p>
+        </div>
       
     </div>
     <footer class="entry-meta entry-footer">
